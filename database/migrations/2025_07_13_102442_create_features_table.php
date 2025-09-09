@@ -11,7 +11,6 @@ return new class extends Migration
         Schema::create('features', function (Blueprint $table) {
             $table->id();
             $table->string('name')->unique();
-            $table->string('icon')->nullable(); // Classe d'icône ou chemin pour l'icône
             $table->timestamps();
         });
     }
