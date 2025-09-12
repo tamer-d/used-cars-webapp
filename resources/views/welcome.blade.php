@@ -170,37 +170,52 @@
         </div>
     </nav>
 
-    <!-- Hero Section with Search -->
+    <!-- Hero Section -->
     <section class="relative pt-16 lg:pt-24">
-        <!-- Background Image -->
-        <div class="absolute inset-0 z-0 h-screen">
+        <!-- Background avec overlay -->
+        <div class="absolute inset-0 z-0 h-[85vh]">
             <div
                 class="absolute inset-0 bg-gradient-to-br from-blue-900/90 to-gray-900/80 z-10 dark:from-black/90 dark:to-gray-900/90">
             </div>
             <img src="{{ asset('images/car-hero.jpg') }}" alt="Luxury car" class="w-full h-full object-cover"
-                onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1494976388531-d1058494cdd8?q=80&w=2070&auto=format&fit=crop'">
+                onerror="this.src='https://images.unsplash.com/photo-1494976388531-d1058494cdd8?q=80&w=2070&auto=format&fit=crop'">
         </div>
 
         <!-- Hero Content -->
-        <div class="relative z-20 flex flex-col items-center justify-center h-screen text-center px-4 sm:px-6 lg:px-8">
-            <div class="animate-fade-in-down">
-                <h1 class="text-4xl sm:text-5xl md:text-6xl font-bold text-white leading-tight mb-6">
-                    Your next car is waiting for you <br class="hidden md:block">at an exceptional price!
-                </h1>
+        <div
+            class="relative z-20 flex flex-col items-center justify-center min-h-[85vh] text-center px-4 sm:px-6 lg:px-8">
+            <div class="max-w-4xl mx-auto space-y-12">
+                <!-- Titre et sous-titre -->
+                <div class="animate-fade-in-down">
+                    <h1 class="text-4xl sm:text-5xl md:text-6xl font-bold text-white leading-tight mb-6">
+                        Your next car is waiting for you <br class="hidden md:block">at an exceptional price!
+                    </h1>
+                    <p class="text-xl md:text-2xl text-white/80 max-w-3xl mx-auto">
+                        Thousands of verified listings for every budget and preference.
+                    </p>
+                </div>
 
-                <p class="text-xl md:text-2xl text-white/80 max-w-3xl mb-10">
-                    Thousands of verified listings for every budget and preference.
-                </p>
+                <!-- Boutons d'action principaux (maintenant au milieu) -->
+                <div class="flex flex-col sm:flex-row justify-center gap-6 animate-fade-in-up">
+                    <a href="#how-it-works"
+                        class="px-8 py-4 bg-white text-blue-600 text-lg font-semibold rounded-lg hover:bg-gray-100 transition duration-300 transform hover:scale-105 hover:shadow-xl">
+                        How It Works ?
+                    </a>
+                    <a href="#listings"
+                        class="px-8 py-4 bg-blue-600 text-white text-lg font-semibold rounded-lg hover:bg-blue-700 transition duration-300 transform hover:scale-105 hover:shadow-xl">
+                        Browse Cars
+                    </a>
+                </div>
 
-                <!-- Search Form -->
+                <!-- Barre de recherche (maintenant en bas) -->
                 <div
-                    class="max-w-4xl mx-auto w-full bg-white dark:bg-gray-800 rounded-lg shadow-xl p-4 mb-10 transform transition hover:scale-[1.01] duration-300 animate-fade-in-up">
+                    class="w-full max-w-4xl mx-auto bg-white/95 dark:bg-gray-800/95 rounded-xl shadow-2xl p-6 backdrop-blur-sm animate-fade-in-up">
                     <form class="grid grid-cols-1 md:grid-cols-4 gap-4">
                         <div>
                             <label for="make"
                                 class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 text-left">Make</label>
                             <select id="make" name="make"
-                                class="w-full rounded-md border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-white shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                class="w-full rounded-lg border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-white shadow-sm focus:ring-blue-500 focus:border-blue-500">
                                 <option>Any Make</option>
                                 <option>Toyota</option>
                                 <option>Honda</option>
@@ -214,7 +229,7 @@
                                 class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 text-left">Max
                                 Price</label>
                             <select id="price" name="price"
-                                class="w-full rounded-md border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-white shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                class="w-full rounded-lg border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-white shadow-sm focus:ring-blue-500 focus:border-blue-500">
                                 <option>Any Price</option>
                                 <option>$5,000</option>
                                 <option>$10,000</option>
@@ -228,7 +243,7 @@
                                 class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 text-left">Body
                                 Type</label>
                             <select id="bodyType" name="bodyType"
-                                class="w-full rounded-md border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-white shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                class="w-full rounded-lg border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-white shadow-sm focus:ring-blue-500 focus:border-blue-500">
                                 <option>Any Type</option>
                                 <option>Sedan</option>
                                 <option>SUV</option>
@@ -240,7 +255,7 @@
                         <div>
                             <label class="invisible block text-sm font-medium mb-1">Search</label>
                             <button type="submit"
-                                class="w-full bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-md transition duration-300 shadow-md">
+                                class="w-full bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white font-bold py-3 px-4 rounded-lg transition duration-300 shadow-md hover:shadow-xl">
                                 Search Cars
                             </button>
                         </div>
@@ -250,18 +265,6 @@
                             Advanced Search
                         </button>
                     </div>
-                </div>
-
-                <div class="flex flex-col sm:flex-row gap-4">
-                    <a href="#listings"
-                        class="bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white font-bold py-3 px-8 rounded-lg text-lg transition duration-300 ease-in-out transform hover:scale-105 shadow-xl">
-                        Browse Listings
-                    </a>
-
-                    <a href="#how-it-works"
-                        class="bg-white hover:bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 text-blue-900 dark:text-white font-bold py-3 px-8 rounded-lg text-lg transition duration-300 ease-in-out shadow-xl">
-                        How It Works
-                    </a>
                 </div>
             </div>
         </div>
