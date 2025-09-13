@@ -527,7 +527,8 @@
                     </p>
                 </div>
                 <div class="flex flex-col gap-4">
-                    <a href="{{ route('register') }}"
+                    <!-- CTA Button -->
+                    <a href="{{ auth()->check() ? route('cars.create') : route('register') }}"
                         class="group relative bg-white hover:bg-gray-100 text-blue-700 font-bold py-4 px-8 rounded-lg text-lg transition duration-300 ease-in-out transform hover:scale-105 shadow-xl text-center min-w-[200px]">
                         Post Your Car for Sale
                         <span
