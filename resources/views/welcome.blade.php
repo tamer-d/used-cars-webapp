@@ -517,21 +517,86 @@
     <section class="py-16 bg-blue-700 dark:bg-blue-800 transition-colors duration-200">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex flex-col md:flex-row items-center justify-between">
-                <div class="mb-8 md:mb-0 md:mr-8">
-                    <h2 class="text-3xl font-bold text-white mb-4">Ready to Find Your Perfect Car?</h2>
+                <div class="mb-8 md:mb-0 md:mr-8 text-center md:text-left">
+                    <h2 class="text-4xl font-bold text-white mb-4">
+                        Sell Your Car Easily & Quickly
+                    </h2>
                     <p class="text-xl text-blue-100 max-w-2xl">
-                        Join thousands of satisfied customers who found their dream cars on our platform.
+                        Join thousands of sellers who trust our platform. Post your car in minutes and connect with
+                        serious buyers in your area.
                     </p>
                 </div>
-                <div class="flex flex-col sm:flex-row gap-4">
-                    <a href="#listings"
-                        class="bg-white hover:bg-gray-100 text-blue-700 font-bold py-3 px-8 rounded-lg text-lg transition duration-300 ease-in-out transform hover:scale-105 shadow-xl text-center">
-                        Browse Cars
+                <div class="flex flex-col gap-4">
+                    <a href="{{ route('register') }}"
+                        class="group relative bg-white hover:bg-gray-100 text-blue-700 font-bold py-4 px-8 rounded-lg text-lg transition duration-300 ease-in-out transform hover:scale-105 shadow-xl text-center min-w-[200px]">
+                        Post Your Car for Sale
+                        <span
+                            class="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold px-2 py-0.5 rounded-full animate-pulse">
+                            FREE
+                        </span>
                     </a>
-                    <a href="#"
-                        class="bg-blue-900 hover:bg-blue-800 text-white font-bold py-3 px-8 rounded-lg text-lg transition duration-300 ease-in-out shadow-xl text-center">
-                        Sell Your Car
-                    </a>
+                    <p class="text-center text-blue-100 text-sm">
+                        Already have an account?
+                        <a href="{{ route('login') }}" class="text-white hover:underline font-medium">
+                            Sign in to manage your listings
+                        </a>
+                    </p>
+                </div>
+            </div>
+
+            <!-- Features Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12">
+                <!-- Feature 1 -->
+                <div class="flex items-center space-x-4 bg-blue-600/50 dark:bg-blue-900/50 rounded-lg p-4">
+                    <div class="flex-shrink-0">
+                        <svg class="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="text-white font-semibold">Quick & Easy Listing</h3>
+                        <p class="text-blue-100 text-sm">Create your listing in less than 5 minutes</p>
+                    </div>
+                </div>
+
+                <!-- Feature 2 -->
+                <div class="flex items-center space-x-4 bg-blue-600/50 dark:bg-blue-900/50 rounded-lg p-4">
+                    <div class="flex-shrink-0">
+                        <svg class="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="text-white font-semibold">Local Buyers Network</h3>
+                        <p class="text-blue-100 text-sm">Connect with serious buyers in your area</p>
+                    </div>
+                </div>
+
+                <!-- Feature 3 -->
+                <div class="flex items-center space-x-4 bg-blue-600/50 dark:bg-blue-900/50 rounded-lg p-4">
+                    <div class="flex-shrink-0">
+                        <svg class="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="text-white font-semibold">Instant Notifications</h3>
+                        <p class="text-blue-100 text-sm">Get alerts when buyers show interest</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Additional Benefits -->
+            <div class="mt-12 text-center">
+                <div
+                    class="inline-flex items-center space-x-2 text-white bg-blue-600/50 dark:bg-blue-900/50 rounded-full px-4 py-2">
+                    <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                    </svg>
+                    <span class="text-sm">No listing fees • Direct contact with buyers • Easy to use platform</span>
                 </div>
             </div>
         </div>
