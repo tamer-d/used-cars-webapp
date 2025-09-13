@@ -37,63 +37,103 @@
                     </a>
                 </div>
 
-                <!-- Liens de navigation (version desktop) -->
-                <div class="hidden sm:flex sm:items-center sm:ml-6 space-x-8">
-                    <a href="#listings"
-                        class="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white relative group">
-                        Listings
+                <!-- Navigation desktop -->
+                <div class="hidden sm:flex items-center space-x-8">
+                    <a href="{{ route('cars.index') }}"
+                        class="text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white relative">
+                        Buy Cars
                         <span
-                            class="absolute -top-2 -right-6 bg-red-500 text-white text-xs font-bold px-2 py-0.5 rounded-full animate-pulse">
+                            class="absolute top-0 right-0 -mt-2 -mr-2 bg-red-500 text-white text-xs font-bold px-2 py-0.5 rounded-full animate-pulse">
                             NEW
                         </span>
                     </a>
-                    <a href="#categories"
-                        class="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">Categories</a>
-                    <a href="#about"
-                        class="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">About</a>
+                    <a href="#how-it-works"
+                        class="text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">
+                        How It Works
+                    </a>
+                    <a href="{{ route('about') }}"
+                        class="text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">
+                        About Us
+                    </a>
+                    <a href="{{ route('contact') }}"
+                        class="text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">
+                        Contact Us
+                    </a>
 
                     @auth
                         <a href="{{ url('/dashboard') }}"
-                            class="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">Dashboard</a>
-
+                            class="text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">Dashboard</a>
                         <!-- Logout Form -->
                         <form method="POST" action="{{ route('logout') }}" class="inline">
                             @csrf
                             <button type="submit"
-                                class="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">
+                                class="text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">
                                 Logout
                             </button>
                         </form>
                     @else
                         <a href="{{ route('login') }}"
-                            class="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">Login</a>
+                            class="text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">Login</a>
 
                         @if (Route::has('register'))
                             <a href="{{ route('register') }}"
-                                class="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">Register</a>
+                                class="text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">Register</a>
                         @endif
                     @endauth
+                </div>
 
-                    <!-- Dark mode toggle -->
-                    <button @click="darkMode = !darkMode"
-                        class="p-1 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-200">
-                        <svg x-show="!darkMode" class="h-6 w-6 text-gray-700" fill="none" viewBox="0 0 24 24"
-                            stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
-                        </svg>
-                        <svg x-show="darkMode" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24"
-                            stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
-                        </svg>
-                    </button>
+                <!-- Menu mobile (contenu) -->
+                <div id="mobile-menu"
+                    class="hidden sm:hidden bg-white dark:bg-gray-800 pb-4 px-4 transition-colors duration-200">
+                    <div class="space-y-2 pt-2">
+                        <a href="{{ route('cars.index') }}"
+                            class="block px-3 py-2 rounded-md text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-700 relative">
+                            Buy Cars
+                            <span
+                                class="absolute top-2 right-6 bg-red-500 text-white text-xs font-bold px-2 py-0.5 rounded-full animate-pulse">
+                                NEW
+                            </span>
+                        </a>
+                        <a href="#how-it-works"
+                            class="block px-3 py-2 rounded-md text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-700">
+                            How It Works
+                        </a>
+                        <a href="{{ route('about') }}"
+                            class="block px-3 py-2 rounded-md text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-700">
+                            About Us
+                        </a>
+                        <a href="{{ route('contact') }}"
+                            class="block px-3 py-2 rounded-md text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-700">
+                            Contact Us
+                        </a>
 
-                    <!-- CTA Button -->
-                    <a href="#"
-                        class="bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-md transition duration-300 ease-in-out transform hover:scale-105 hover:shadow-lg">
-                        Sell Your Car
-                    </a>
+                        @auth
+                            <a href="{{ url('/dashboard') }}"
+                                class="block px-3 py-2 rounded-md text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-700">
+                                Dashboard
+                            </a>
+                            <!-- Logout Form (mobile) -->
+                            <form method="POST" action="{{ route('logout') }}" class="block">
+                                @csrf
+                                <button type="submit"
+                                    class="w-full text-left px-3 py-2 rounded-md text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-700">
+                                    Logout
+                                </button>
+                            </form>
+                        @else
+                            <a href="{{ route('login') }}"
+                                class="block px-3 py-2 rounded-md text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-700">
+                                Login
+                            </a>
+
+                            @if (Route::has('register'))
+                                <a href="{{ route('register') }}"
+                                    class="block px-3 py-2 rounded-md text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-700">
+                                    Register
+                                </a>
+                            @endif
+                        @endauth
+                    </div>
                 </div>
 
                 <!-- Menu mobile (hamburger) -->

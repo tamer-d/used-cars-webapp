@@ -13,3 +13,16 @@ Route::view('profile', 'profile')
     ->name('profile');
 
 require __DIR__.'/auth.php';
+
+// Route pour la liste des voitures
+Route::get('/cars', [CarController::class, 'index'])->name('cars.index');
+
+// Route pour la page About Us
+Route::get('/about', function () {
+    return view('pages.about');
+})->name('about');
+
+// Route pour la page Contact
+Route::get('/contact', function () {
+    return view('pages.contact');
+})->name('contact');
