@@ -15,95 +15,37 @@ class CarResource extends Resource
     protected static ?string $model = Car::class;
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
-    public static function form(Form $form): Form
-    {
-        return $form
-            ->schema([
-                Forms\Components\Select::make('user_id')
-                    ->relationship('user', 'name')
-                    ->required(),
-                Forms\Components\TextInput::make('title')
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\Select::make('brand_id')
-                    ->relationship('brand', 'name')
-                    ->required(),
-                Forms\Components\Select::make('model_id')
-                    ->relationship('model', 'name')
-                    ->required(),
-                Forms\Components\Select::make('category_id')
-                    ->relationship('category', 'name')
-                    ->required(),
-                Forms\Components\TextInput::make('price')
-                    ->required()
-                    ->numeric()
-                    ->prefix('$'),
-                Forms\Components\TextInput::make('year')
-                    ->required()
-                    ->numeric(),
-                Forms\Components\TextInput::make('mileage')
-                    ->required()
-                    ->numeric()
-                    ->suffix('km'),
-                Forms\Components\Select::make('fuel_type')
-                    ->options([
-                        'gasoline' => 'Gasoline',
-                        'diesel' => 'Diesel',
-                        'electric' => 'Electric',
-                        'hybrid' => 'Hybrid',
-                    ])
-                    ->required(),
-                Forms\Components\Select::make('transmission')
-                    ->options([
-                        'automatic' => 'Automatic',
-                        'manual' => 'Manual',
-                    ])
-                    ->required(),
-                Forms\Components\TextInput::make('color')
-                    ->required(),
-                Forms\Components\TextInput::make('engine_size')
-                    ->numeric(),
-                Forms\Components\TextInput::make('power')
-                    ->numeric()
-                    ->suffix('HP'),
-                Forms\Components\Select::make('status')
-                    ->options([
-                        'pending' => 'Pending',
-                        'approved' => 'Approved',
-                        'rejected' => 'Rejected',
-                    ])
-                    ->required(),
-                Forms\Components\Toggle::make('is_featured')
-                    ->label('Featured Listing'),
-                Forms\Components\Textarea::make('description')
-                    ->required()
-                    ->maxLength(1000)
-                    ->columnSpanFull(),
-            ]);
-    }
-
-    public static function table(Table $table): Table
+    
+ public static function table(Table $table): Table
     {
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('title')
-                    ->searchable(),
+                    ->searchable()
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('brand.name')
-                    ->searchable(),
+                    ->searchable()
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('price')
-                    ->money('USD')
+                    ->money('EUR')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('year')
                     ->sortable(),
-                Tables\Columns\TextColumn::make('status')
-                    ->badge()
-                    ->color(fn (string $state): string => match ($state) {
-                        'approved' => 'success',
-                        'pending' => 'warning',
-                        'rejected' => 'danger',
-                    }),
+                Tables\Columns\TextColumn::make('mileage')
+                    ->numeric()
+                    ->suffix(' km')
+                    ->sortable(),
+                Tables\Columns\BadgeColumn::make('status')
+                    ->colors([
+                        'warning' => 'pending',
+                        'success' => 'approved',
+                        'danger' => 'rejected',
+                        'info' => 'sold',
+                    ]),
                 Tables\Columns\IconColumn::make('is_featured')
                     ->boolean(),
+                Tables\Columns\TextColumn::make('views_count')
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable(),
@@ -111,22 +53,39 @@ class CarResource extends Resource
             ->filters([
                 Tables\Filters\SelectFilter::make('status')
                     ->options([
-                        'pending' => 'Pending',
-                        'approved' => 'Approved',
-                        'rejected' => 'Rejected',
+                        'pending' => 'En attente',
+                        'approved' => 'Approuvée',
+                        'rejected' => 'Rejetée',
+                        'sold' => 'Vendue',
                     ]),
-                Tables\Filters\TernaryFilter::make('is_featured')
-                    ->label('Featured'),
+                Tables\Filters\SelectFilter::make('brand')
+                    ->relationship('brand', 'name'),
+                Tables\Filters\SelectFilter::make('fuel_type')
+                    ->options([
+                        'diesel' => 'Diesel',
+                        'essence' => 'Essence',
+                        'électrique' => 'Électrique',
+                        'hybride' => 'Hybride',
+                        'gpl' => 'GPL',
+                    ]),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\Action::make('approve')
+                    ->action(fn (Car $record) => $record->update(['status' => 'approved']))
+                    ->requiresConfirmation()
+                    ->color('success')
+                    ->icon('heroicon-o-check')
+                    ->visible(fn (Car $record) => $record->status === 'pending'),
+                Tables\Actions\Action::make('reject')
+                    ->action(fn (Car $record) => $record->update(['status' => 'rejected']))
+                    ->requiresConfirmation()
+                    ->color('danger')
+                    ->icon('heroicon-o-x-mark')
+                    ->visible(fn (Car $record) => $record->status === 'pending'),
                 Tables\Actions\DeleteAction::make(),
-            ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
             ]);
+            
     }
 
     public static function getRelations(): array
@@ -140,8 +99,6 @@ class CarResource extends Resource
     {
         return [
             'index' => Pages\ListCars::route('/'),
-            'create' => Pages\CreateCar::route('/create'),
-            'edit' => Pages\EditCar::route('/{record}/edit'),
         ];
     }
 }
