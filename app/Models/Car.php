@@ -25,7 +25,6 @@ class Car extends Model
         'doors',
         'engine_size',
         'power',
-        'status',
         'is_featured',
         'location',
     ];

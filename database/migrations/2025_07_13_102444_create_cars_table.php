@@ -25,7 +25,6 @@ return new class extends Migration
             $table->unsignedSmallInteger('doors')->default(5);
             $table->string('engine_size')->nullable();
             $table->unsignedInteger('power')->nullable(); // puissance en CV
-            $table->enum('status', ['pending', 'approved', 'sold', 'rejected'])->default('pending');
             $table->boolean('is_featured')->default(false);
             $table->unsignedInteger('views_count')->default(0);
             $table->string('location'); // ville ou région

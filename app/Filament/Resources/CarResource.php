@@ -15,8 +15,8 @@ class CarResource extends Resource
     protected static ?string $model = Car::class;
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
-    
- public static function table(Table $table): Table
+
+    public static function table(Table $table): Table
     {
         return $table
             ->columns([
@@ -35,13 +35,6 @@ class CarResource extends Resource
                     ->numeric()
                     ->suffix(' km')
                     ->sortable(),
-                Tables\Columns\BadgeColumn::make('status')
-                    ->colors([
-                        'warning' => 'pending',
-                        'success' => 'approved',
-                        'danger' => 'rejected',
-                        'info' => 'sold',
-                    ]),
                 Tables\Columns\IconColumn::make('is_featured')
                     ->boolean(),
                 Tables\Columns\TextColumn::make('views_count')
@@ -51,13 +44,6 @@ class CarResource extends Resource
                     ->sortable(),
             ])
             ->filters([
-                Tables\Filters\SelectFilter::make('status')
-                    ->options([
-                        'pending' => 'En attente',
-                        'approved' => 'Approuvée',
-                        'rejected' => 'Rejetée',
-                        'sold' => 'Vendue',
-                    ]),
                 Tables\Filters\SelectFilter::make('brand')
                     ->relationship('brand', 'name'),
                 Tables\Filters\SelectFilter::make('fuel_type')
@@ -70,22 +56,13 @@ class CarResource extends Resource
                     ]),
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\Action::make('approve')
-                    ->action(fn (Car $record) => $record->update(['status' => 'approved']))
-                    ->requiresConfirmation()
-                    ->color('success')
-                    ->icon('heroicon-o-check')
-                    ->visible(fn (Car $record) => $record->status === 'pending'),
-                Tables\Actions\Action::make('reject')
-                    ->action(fn (Car $record) => $record->update(['status' => 'rejected']))
-                    ->requiresConfirmation()
-                    ->color('danger')
-                    ->icon('heroicon-o-x-mark')
-                    ->visible(fn (Car $record) => $record->status === 'pending'),
                 Tables\Actions\DeleteAction::make(),
+            ])
+            ->bulkActions([
+                Tables\Actions\BulkActionGroup::make([
+                    Tables\Actions\DeleteBulkAction::make(),
+                ]),
             ]);
-            
     }
 
     public static function getRelations(): array
