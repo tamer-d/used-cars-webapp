@@ -30,7 +30,24 @@ class User extends Authenticatable
         'is_admin' => 'boolean',
     ];
     
-    // Relations
+     public static function validationRules($id = null)
+    {
+        return [
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email,' . $id,
+            'phone_number' => 'nullable|regex:/^[0-9]{10}$/',
+            'password' => 'required|min:8',
+        ];
+    }
+    
+    public static function validationMessages()
+    {
+        return [
+            'phone_number.regex' => 'Le numéro de téléphone doit contenir exactement 10 chiffres.',
+        ];
+    }
+    
+
     public function cars()
     {
         return $this->hasMany(Car::class);
