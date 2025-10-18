@@ -11,8 +11,7 @@ return new class extends Migration
         Schema::create('brands', function (Blueprint $table) {
             $table->id();
             $table->string('name')->unique();
-            // On laissera le champ logo pour plus tard
-            // $table->string('logo')->nullable();
+            $table->string('logo')->nullable();
             $table->timestamps();
         });
     }

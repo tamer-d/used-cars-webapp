@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}"x-data="{ darkMode: localStorage.getItem('darkMode') === 'true' || (!('darkMode' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches) }"
+    x-init="$watch('darkMode', val => localStorage.setItem('darkMode', val))":class="{ 'dark': darkMode }">
 
 <head>
     <meta charset="utf-8">
@@ -43,7 +44,7 @@
                         class="text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white relative">
                         Buy Cars
                         <span
-                            class="absolute top-0 right-0 -mt-2 -mr-2 bg-red-500 text-white text-xs font-bold px-2 py-0.5 rounded-full animate-pulse">
+                            class="absolute -top-2.5 -right-4 bg-red-500 text-gray-100 text-xs font-semibold px-0.9 py-0.5 rounded-full shadow-md transform transition-transform duration-300 hover:scale-110">
                             NEW
                         </span>
                     </a>

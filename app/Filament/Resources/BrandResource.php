@@ -9,11 +9,13 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Support\Facades\Storage;
+
 
 class BrandResource extends Resource
 {
     protected static ?string $model = Brand::class;
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationGroup = 'Vehicle Management';
 
     public static function form(Form $form): Form
     {
@@ -23,6 +25,21 @@ class BrandResource extends Resource
                     ->required()
                     ->maxLength(255)
                     ->unique(ignoreRecord: true),
+                    
+                Forms\Components\FileUpload::make('logo')
+                    ->image()
+                    ->directory('brands')
+                    ->disk('public')
+                    ->imageEditor()
+                    ->imageEditorAspectRatios([
+                        '1:1',
+                        '16:9',
+                        '4:3',
+                    ])
+                    ->maxSize(2048) // 2MB max
+                    ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp'])
+                    ->helperText('Formats acceptés: JPG, PNG, WebP. Taille max: 2MB')
+                    ->columnSpanFull(),
             ]);
     }
 
@@ -30,10 +47,20 @@ class BrandResource extends Resource
     {
         return $table
             ->columns([
+                 Tables\Columns\ImageColumn::make('logo')
+                    ->label('Logo')
+                    ->disk('public')
+                    ->height(50)
+                    ->width(50)
+                    ->circular()
+                    ->defaultImageUrl(asset('images/default-brand.png'))
+                    ->extraAttributes(['class' => 'object-contain']),  
                 Tables\Columns\TextColumn::make('name')
-                    ->searchable(),
+                ->sortable()    
+                ->searchable(),
                 Tables\Columns\TextColumn::make('cars_count')
                     ->counts('cars')
+                    ->sortable()
                     ->label('Number of Cars'),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
@@ -48,7 +75,14 @@ class BrandResource extends Resource
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                    Tables\Actions\DeleteBulkAction::make()
+                        ->before(function ($records) {
+                            foreach ($records as $record) {
+                                if ($record->logo) {
+                                    Storage::disk('public')->delete($record->logo);
+                                }
+                            }
+                        }),
                 ]),
             ]);
     }
