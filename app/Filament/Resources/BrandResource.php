@@ -47,14 +47,16 @@ class BrandResource extends Resource
     {
         return $table
             ->columns([
-                 Tables\Columns\ImageColumn::make('logo')
-                    ->label('Logo')
-                    ->disk('public')
-                    ->height(50)
-                    ->width(50)
-                    ->circular()
-                    ->defaultImageUrl(asset('images/default-brand.png'))
-                    ->extraAttributes(['class' => 'object-contain']),  
+                Tables\Columns\ImageColumn::make('logo')
+    ->label('Logo')
+    ->height(60)
+    ->width(60)
+    ->circular()
+    ->getStateUsing(fn ($record) => 
+        $record->logo 
+            ? asset('storage/' . $record->logo)
+            : asset('images/default-brand.png')
+    ),
                 Tables\Columns\TextColumn::make('name')
                 ->sortable()    
                 ->searchable(),
