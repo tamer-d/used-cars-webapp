@@ -12,8 +12,7 @@ use Filament\Tables\Table;
 
 class CategoryResource extends Resource
 {
-    protected static ?string $model = Category::class;
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $model = Category::class;    protected static ?string $navigationGroup = 'Vehicle Management';
 
 
     public static function form(Form $form): Form
@@ -22,9 +21,17 @@ class CategoryResource extends Resource
             ->schema([
                 Forms\Components\TextInput::make('name')
                     ->required()
-                    ->maxLength(255),
+                    ->maxLength(255)
+                    ->unique(ignoreRecord: true)
+                    ->placeholder('Ex: Berline, SUV, Coupé...')
+                    ->helperText('Entrez le nom de la catégorie (doit être unique)'),
+                    
                 Forms\Components\Textarea::make('description')
                     ->maxLength(1000)
+                    ->label('Description')
+                    ->placeholder('Description de la catégorie...')
+                    ->helperText('Description optionnelle de la catégorie (max 1000 caractères)')
+                    ->rows(4)
                     ->columnSpanFull(),
             ]);
     }
@@ -34,26 +41,50 @@ class CategoryResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('name')
-                    ->searchable(),
+                    ->searchable()
+                    ->sortable()
+                    ->weight('bold'),
+                    
+                Tables\Columns\TextColumn::make('description')
+                    ->limit(50)
+                    ->tooltip(function (Tables\Columns\TextColumn $column): ?string {
+                        $state = $column->getState();
+                        if (strlen($state) <= 50) {
+                            return null;
+                        }
+                        return $state;
+                    })
+                    ->toggleable(),
+                    
                 Tables\Columns\TextColumn::make('cars_count')
                     ->counts('cars')
-                    ->label('Number of Cars'),
+                    ->sortable()
+                    ->badge()
+                    ->color('success'),
+                    
                 Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable(),
-            ])
-            ->filters([
-                //
+                    ->dateTime('d/m/Y H:i')
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+                    
             ])
             ->actions([
+                Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+                Tables\Actions\DeleteAction::make()
+                    ->requiresConfirmation()
+                    ->modalDescription('Êtes-vous sûr de vouloir supprimer cette catégorie ? ')
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                    Tables\Actions\DeleteBulkAction::make()
+                        ->requiresConfirmation()
+                        ->modalHeading('Supprimer les catégories sélectionnées')
+                        ->modalDescription('Êtes-vous sûr de vouloir supprimer ces catégories ?')
                 ]),
-            ]);
+            ])
+            ->defaultSort('name')
+            ->striped();
     }
 
     public static function getPages(): array
