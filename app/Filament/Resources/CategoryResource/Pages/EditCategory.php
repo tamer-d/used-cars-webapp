@@ -13,7 +13,20 @@ class EditCategory extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
-            Actions\DeleteAction::make(),
+            Actions\DeleteAction::make()
+                ->requiresConfirmation()
+                ->modalHeading('Supprimer la catégorie')
+                ->modalDescription('Êtes-vous sûr de vouloir supprimer cette catégorie ?')
         ];
+    }
+
+    protected function getRedirectUrl(): string
+    {
+        return $this->getResource()::getUrl('index');
+    }
+
+    protected function getSavedNotificationTitle(): ?string
+    {
+        return 'Catégorie mise à jour avec succès';
     }
 }
