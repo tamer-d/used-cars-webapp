@@ -13,7 +13,20 @@ class EditFeature extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
-            Actions\DeleteAction::make(),
+            Actions\DeleteAction::make()
+                ->label('Supprimer')
+                ->requiresConfirmation()
+                ->modalDescription('Êtes-vous sûr de vouloir supprimer cette caractéristique ?')
         ];
+    }
+
+    protected function getRedirectUrl(): string
+    {
+        return $this->getResource()::getUrl('index');
+    }
+
+    protected function getSavedNotificationTitle(): ?string
+    {
+        return 'Caractéristique mise à jour avec succès';
     }
 }

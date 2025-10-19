@@ -19,3 +19,4 @@ class CreateFeature extends CreateRecord
     {
         return 'Caractéristique créée avec succès';
     }
+}
