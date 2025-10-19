@@ -13,8 +13,7 @@ use Filament\Tables\Table;
 class FeatureResource extends Resource
 {
     protected static ?string $model = Feature::class;
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
-
+    protected static ?string $navigationGroup = 'Vehicle Management';
 
     public static function form(Form $form): Form
     {
@@ -23,7 +22,9 @@ class FeatureResource extends Resource
                 Forms\Components\TextInput::make('name')
                     ->required()
                     ->maxLength(255)
-                    ->unique(ignoreRecord: true),
+                    ->unique(ignoreRecord: true)
+                    ->placeholder('Ex: Climatisation, GPS, Bluetooth...')
+                    ->helperText('Entrez le nom de la caractéristique (doit être unique)'),
             ]);
     }
 
@@ -32,33 +33,41 @@ class FeatureResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('name')
-                    ->searchable(),
+                    ->searchable()
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('cars_count')
                     ->counts('cars')
-                    ->label('Voitures utilisant cette caractéristique'),
+                    ->label('Cars')
+                    ->sortable()
+                    ->badge()
+                    ->color('success'),
                 Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable(),
+                    ->dateTime('d/m/Y H:i')
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('updated_at')
+                    ->label('Modifié le')
+                    ->dateTime('d/m/Y H:i')
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
             ])
-            ->filters([
-                //
-            ])
+            
             ->actions([
+                Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
-            ])
+                Tables\Actions\DeleteAction::make()
+                    ->requiresConfirmation()
+                    ->modalHeading('Supprimer la caractéristique')
+                    ->modalDescription('Êtes-vous sûr de vouloir supprimer cette caractéristique ?'),            ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
-            ]);
-    }
-
-    public static function getRelations(): array
-    {
-        return [
-            //
-        ];
+                    Tables\Actions\DeleteBulkAction::make()                        ->requiresConfirmation()
+                        ->modalHeading('Supprimer les caractéristiques sélectionnées')
+                        ->modalDescription('Êtes-vous sûr de vouloir supprimer ces caractéristiques ?')                ]),
+            ])
+            ->defaultSort('name')
+            ->striped()
+            ->paginated([10, 25, 50, 100]);
     }
 
     public static function getPages(): array
