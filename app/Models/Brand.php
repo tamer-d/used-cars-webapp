@@ -34,6 +34,12 @@ class Brand extends Model
     {
         parent::boot();
         
+        static::updating(function ($brand) {
+            if ($brand->isDirty('logo') && $brand->getOriginal('logo')) {
+                Storage::disk('public')->delete($brand->getOriginal('logo'));
+            }
+        });
+        
         static::deleting(function ($brand) {
             if ($brand->logo) {
                 Storage::delete($brand->logo);

@@ -10,6 +10,7 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Support\Facades\Storage;
+use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 
 
 class BrandResource extends Resource
@@ -30,16 +31,15 @@ class BrandResource extends Resource
                     ->image()
                     ->directory('brands')
                     ->disk('public')
-                    ->imageEditor()
-                    ->imageEditorAspectRatios([
-                        '1:1',
-                        '16:9',
-                        '4:3',
-                    ])
+                    ->visibility('public')
                     ->maxSize(2048) // 2MB max
                     ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp'])
                     ->helperText('Formats acceptés: JPG, PNG, WebP. Taille max: 2MB')
-                    ->columnSpanFull(),
+                    ->deleteUploadedFileUsing(fn ($file) => Storage::disk('public')->delete($file))
+                    ->getUploadedFileNameForStorageUsing(
+                        fn (TemporaryUploadedFile $file): string => (string) str($file->getClientOriginalName())
+                            ->prepend('brand-logo-'),
+                    ),
             ]);
     }
 
