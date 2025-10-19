@@ -53,9 +53,7 @@ class CategoryResource extends Resource
                             return null;
                         }
                         return $state;
-                    })
-                    ->toggleable(),
-                    
+                    }),                    
                 Tables\Columns\TextColumn::make('cars_count')
                     ->counts('cars')
                     ->sortable()
@@ -64,9 +62,7 @@ class CategoryResource extends Resource
                     
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime('d/m/Y H:i')
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                    
+                    ->sortable(),                    
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),
