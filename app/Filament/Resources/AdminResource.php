@@ -11,6 +11,11 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Support\Facades\Auth;
+
 
 class AdminResource extends Resource
 {
@@ -74,7 +79,7 @@ class AdminResource extends Resource
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make->requiresConfirmation()
+                    Tables\Actions\DeleteBulkAction::make()->requiresConfirmation()
                         ->modalHeading('Supprimer les administrateurs sélectionnés')
                         ->modalDescription('Êtes-vous sûr de vouloir supprimer ces administrateurs ?')
                         ->action(function ($records) {

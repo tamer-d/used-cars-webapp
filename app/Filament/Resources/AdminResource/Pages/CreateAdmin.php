@@ -8,6 +8,7 @@ use Filament\Resources\Pages\CreateRecord;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 
+
 class CreateAdmin extends CreateRecord
 {
     protected static string $resource = AdminResource::class;
