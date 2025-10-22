@@ -67,10 +67,8 @@ class BrandResource extends Resource
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable(),
-            ])
-            ->filters([
-                //
-            ])
+            ])     
+            ->paginated(false)
             ->actions([
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),

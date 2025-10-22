@@ -80,6 +80,7 @@ class CategoryResource extends Resource
                 ]),
             ])
             ->defaultSort('name')
+            ->paginated(false)
             ->striped();
     }
 

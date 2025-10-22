@@ -64,8 +64,8 @@ class FeatureResource extends Resource
                         ->modalDescription('Êtes-vous sûr de vouloir supprimer ces caractéristiques ?')                ]),
             ])
             ->defaultSort('name')
-            ->striped()
-            ->paginated([10, 25, 50, 100]);
+            ->paginated(false)
+            ->striped();
     }
 
     public static function getPages(): array
