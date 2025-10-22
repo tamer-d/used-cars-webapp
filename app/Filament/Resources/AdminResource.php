@@ -20,6 +20,11 @@ class AdminResource extends Resource
     protected static ?string $navigationLabel = 'Administrateurs';
     protected static ?string $pluralModelLabel = 'Administrateurs';
 
+    public static function canAccess(): bool
+    {
+        return Auth::check() && Auth::user()->isSuperAdmin();
+    }
+
     public static function form(Form $form): Form
     {
         return $form
@@ -61,15 +66,25 @@ class AdminResource extends Resource
                     ->label('Ajouté le'),
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+                Tables\Actions\EditAction::make()->visible(fn ($record) => !$record->isSuperAdmin()),
+                Tables\Actions\DeleteAction::make()->visible(fn ($record) => !$record->isSuperAdmin()) 
+                    ->requiresConfirmation()
+                    ->modalHeading('Supprimer cet administrateur')
+                    ->modalDescription('Êtes-vous sûr de vouloir supprimer cet administrateur ? '),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                    Tables\Actions\DeleteBulkAction::make->requiresConfirmation()
+                        ->modalHeading('Supprimer les administrateurs sélectionnés')
+                        ->modalDescription('Êtes-vous sûr de vouloir supprimer ces administrateurs ?')
+                        ->action(function ($records) {
+                            $records->filter(fn ($record) => !$record->isSuperAdmin())->each->delete();
+                        }),
                 ]),
-            ]);
+            ])
+            ->paginated(false);
     }
+
 
     public static function getEloquentQuery(): Builder
     {

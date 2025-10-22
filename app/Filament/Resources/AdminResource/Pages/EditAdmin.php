@@ -6,10 +6,24 @@ use App\Filament\Resources\AdminResource;
 use Filament\Actions;
 use Filament\Forms;
 use Filament\Resources\Pages\EditRecord;
+use Illuminate\Support\Facades\Auth;
 
 class EditAdmin extends EditRecord
 {
     protected static string $resource = AdminResource::class;
+
+    public function mount(int | string $record): void
+    {
+        parent::mount($record);
+        
+        if (!Auth::user()->isSuperAdmin()) {
+            abort(403, 'Seul le super administrateur peut modifier les administrateurs.');
+        }
+        
+        if ($this->record->isSuperAdmin()) {
+            abort(403, 'Le super administrateur ne peut pas être modifié.');
+        }
+    }
 
     protected function getFormSchema(): array
     {
@@ -41,7 +55,11 @@ class EditAdmin extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
-            Actions\DeleteAction::make(),
+            Actions\DeleteAction::make()
+                ->requiresConfirmation()
+                ->modalHeading('Supprimer cet administrateur')
+                ->modalDescription('Êtes-vous sûr de vouloir supprimer cet administrateur ?')
+                ->visible(fn () => !$this->record->isSuperAdmin()),
         ];
     }
 
@@ -53,6 +71,7 @@ class EditAdmin extends EditRecord
     
     protected function getRedirectUrl(): string
     {
-            return $this->getResource()::getUrl('index');
+        return $this->getResource()::getUrl('index');
     }
+
 }

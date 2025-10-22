@@ -78,9 +78,24 @@ class User extends Authenticatable
         return $this->hasMany(Review::class, 'seller_id');
     }
     
-    // Helpers
+
+    const SUPER_ADMIN_EMAIL = 'admin@admin.com';
+
+
     public function isAdmin()
     {
         return $this->is_admin === true;
+    }
+
+     public function isSuperAdmin()
+    {
+        return $this->is_admin && $this->email === self::SUPER_ADMIN_EMAIL;
+    }
+
+     public static function getSuperAdmin()
+    {
+        return self::where('email', self::SUPER_ADMIN_EMAIL)
+                   ->where('is_admin', true)
+                   ->first();
     }
 }
