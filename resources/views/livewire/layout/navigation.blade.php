@@ -60,7 +60,7 @@ if (darkMode) document.documentElement.classList.add('dark');"
 
                         <x-slot name="content">
                             <x-dropdown-link :href="route('profile')">My Profile</x-dropdown-link>
-                            <x-dropdown-link :href="route('favorites')">Favorites</x-dropdown-link>
+
                             <x-dropdown-link :href="route('messages.index')">Messages</x-dropdown-link>
                             <x-dropdown-link href="#" @click.prevent="logout">Logout</x-dropdown-link>
                         </x-slot>
@@ -109,8 +109,7 @@ if (darkMode) document.documentElement.classList.add('dark');"
                 <a href="{{ route('profile') }}"
                     class="block px-4 py-2 text-sm font-medium text-light-text dark:text-dark-text hover:bg-gray-100 dark:hover:bg-gray-700">My
                     Profile</a>
-                <a href="{{ route('favorites') }}"
-                    class="block px-4 py-2 text-sm font-medium text-light-text dark:text-dark-text hover:bg-gray-100 dark:hover:bg-gray-700">Favorites</a>
+
                 <a href="{{ route('messages.index') }}"
                     class="block px-4 py-2 text-sm font-medium text-light-text dark:text-dark-text hover:bg-gray-100 dark:hover:bg-gray-700">Messages</a>
                 <a href="#" @click.prevent="logout"

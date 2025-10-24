@@ -9,9 +9,7 @@ use App\Http\Controllers\ProfileController;
 
 Route::view('/', 'welcome');
 
-Route::view('dashboard', 'dashboard')
-    ->middleware(['auth', 'verified'])
-    ->name('dashboard');
+Route::redirect('/dashboard', '/cars')->name('dashboard');
 
 Route::view('profile', 'profile')
     ->middleware(['auth'])
