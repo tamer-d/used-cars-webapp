@@ -10,41 +10,74 @@ use Illuminate\Support\Facades\Auth;
 
 class CarController extends Controller
 {
-    /**
-     * Affiche la page d'accueil avec les annonces en vedette
-     */
-    public function home()
-    {
-        $featuredCars = Car::with(['brand', 'model', 'category'])
-            ->approved()
-            ->featured()
-            ->latest()
-            ->take(6)
-            ->get();
-            
-        $recentCars = Car::with(['brand', 'model'])
-            ->approved()
-            ->latest()
-            ->take(8)
-            ->get();
-            
-        $brands = Brand::withCount('cars')->orderBy('cars_count', 'desc')->take(10)->get();
-        $categories = Category::withCount('cars')->orderBy('cars_count', 'desc')->get();
-        
-        return view('home', compact('featuredCars', 'recentCars', 'brands', 'categories'));
-    }
-    
-    /**
-     * Liste toutes les annonces avec filtres optionnels
-     */
     public function index(Request $request)
     {
-        $cars = Car::with(['brand', 'model', 'category'])
-            ->approved()
-            ->filter($request->all())
-            ->latest()
-            ->paginate(12);
-            
+        $query = Car::with(['brand', 'model', 'category', 'images']);
+
+        // Recherche textuelle
+        if ($request->filled('search')) {
+            $search = $request->get('search');
+            $query->where(function($q) use ($search) {
+                $q->where('title', 'LIKE', "%{$search}%")
+                  ->orWhere('description', 'LIKE', "%{$search}%")
+                  ->orWhereHas('brand', function($brandQuery) use ($search) {
+                      $brandQuery->where('name', 'LIKE', "%{$search}%");
+                  })
+                  ->orWhereHas('model', function($modelQuery) use ($search) {
+                      $modelQuery->where('name', 'LIKE', "%{$search}%");
+                  });
+            });
+        }
+
+        // Filtres
+        if ($request->filled('brand_id')) {
+            $query->where('brand_id', $request->get('brand_id'));
+        }
+
+        if ($request->filled('category_id')) {
+            $query->where('category_id', $request->get('category_id'));
+        }
+
+        if ($request->filled('max_price')) {
+            $query->where('price', '<=', $request->get('max_price'));
+        }
+
+        if ($request->filled('year')) {
+            $query->where('year', $request->get('year'));
+        }
+
+        if ($request->filled('fuel_type')) {
+            $query->where('fuel_type', $request->get('fuel_type'));
+        }
+
+        if ($request->filled('transmission')) {
+            $query->where('transmission', $request->get('transmission'));
+        }
+
+        // Tri
+        $sortBy = $request->get('sort', 'latest');
+        switch ($sortBy) {
+            case 'price_asc':
+                $query->orderBy('price', 'asc');
+                break;
+            case 'price_desc':
+                $query->orderBy('price', 'desc');
+                break;
+            case 'year_desc':
+                $query->orderBy('year', 'desc');
+                break;
+            case 'mileage_asc':
+                $query->orderBy('mileage', 'asc');
+                break;
+            case 'views_desc':
+                $query->orderBy('views_count', 'desc');
+                break;
+            default:
+                $query->latest();
+        }
+
+        $cars = $query->paginate(12);
+        
         $brands = Brand::withCount('cars')->orderBy('name')->get();
         $categories = Category::all();
         
@@ -53,26 +86,20 @@ class CarController extends Controller
         
         return view('cars.index', compact('cars', 'brands', 'categories', 'years'));
     }
-    
-    /**
-     * Affiche une annonce spécifique
-     */
+
     public function show(Car $car)
     {
-        // Vérifie si l'annonce est approuvée ou appartient à l'utilisateur connecté
-        if ($car->status !== 'approved' && (!Auth::check() || Auth::id() !== $car->user_id)) {
-            abort(404);
-        }
+        // Suppression de la vérification du status car le champ n'existe pas
+        // Maintenant toutes les voitures sont visibles
         
         // Incrémente le compteur de vues
         $car->incrementViewCount();
         
         // Charge les relations
-        $car->load(['user', 'brand', 'model', 'category', 'features']);
+        $car->load(['user', 'brand', 'model', 'category', 'features', 'images']);
         
-        // Annonces similaires
-        $similarCars = Car::with(['brand', 'model'])
-            ->approved()
+        // Annonces similaires 
+        $similarCars = Car::with(['brand', 'model', 'images'])
             ->where('id', '!=', $car->id)
             ->where(function($query) use ($car) {
                 $query->where('brand_id', $car->brand_id)
@@ -83,44 +110,51 @@ class CarController extends Controller
             
         return view('cars.show', compact('car', 'similarCars'));
     }
-    
-    /**
-     * Affiche les annonces par marque
-     */
-    public function byBrand(Brand $brand)
+
+    public function myCars()
     {
-        $cars = Car::with(['model', 'category'])
-            ->approved()
-            ->where('brand_id', $brand->id)
+        $cars = Car::with(['brand', 'model', 'images'])
+            ->where('user_id', Auth::id())
             ->latest()
-            ->paginate(12);
+            ->paginate(10);
             
-        return view('cars.by-brand', compact('cars', 'brand'));
+        return view('cars.my-cars', compact('cars'));
     }
-    
-    /**
-     * Affiche les annonces par catégorie
-     */
+
+    public function home()
+    {
+        $featuredCars = Car::with(['brand', 'model', 'category'])
+            ->featured()
+            ->latest()
+            ->take(6)
+            ->get();
+            
+        $recentCars = Car::with(['brand', 'model'])
+            ->latest()
+            ->take(8)
+            ->get();
+            
+        $brands = Brand::withCount('cars')->orderBy('cars_count', 'desc')->take(10)->get();
+        $categories = Category::withCount('cars')->orderBy('cars_count', 'desc')->get();
+        
+        return view('home', compact('featuredCars', 'recentCars', 'brands', 'categories'));
+    }
+
     public function byCategory(Category $category)
     {
         $cars = Car::with(['brand', 'model'])
-            ->approved()
             ->where('category_id', $category->id)
             ->latest()
             ->paginate(12);
             
         return view('cars.by-category', compact('cars', 'category'));
     }
-    
-    /**
-     * Recherche d'annonces
-     */
+
     public function search(Request $request)
     {
         $query = $request->input('query');
         
         $cars = Car::with(['brand', 'model', 'category'])
-            ->approved()
             ->where(function($q) use ($query) {
                 $q->where('title', 'like', "%{$query}%")
                   ->orWhere('description', 'like', "%{$query}%")
@@ -130,33 +164,5 @@ class CarController extends Controller
             ->paginate(12);
             
         return view('cars.search', compact('cars', 'query'));
-    }
-    
-    /**
-     * Affiche les annonces de l'utilisateur connecté
-     */
-    public function myCars()
-    {
-        $cars = Car::with(['brand', 'model'])
-            ->where('user_id', Auth::id())
-            ->latest()
-            ->paginate(10);
-            
-        return view('cars.my-cars', compact('cars'));
-    }
-    
-    /**
-     * Supprime une annonce
-     */
-    public function destroy(Car $car)
-    {
-        // Vérifie si l'utilisateur est le propriétaire ou admin
-        if (Auth::id() !== $car->user_id && !Auth::user()->isAdmin()) {
-            abort(403);
-        }
-        
-        $car->delete();
-        
-        return redirect()->route('cars.my-cars')->with('success', 'Annonce supprimée avec succès');
     }
 }

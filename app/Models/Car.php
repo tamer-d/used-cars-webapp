@@ -75,12 +75,12 @@ class Car extends Model
         return $this->hasMany(Message::class);
     }
     
-    // Scopes pour des requêtes fréquentes
-    public function scopeApproved($query)
+    public function images()
     {
-        return $query->where('status', 'approved');
+        return $this->hasMany(CarImage::class);
     }
     
+    // Scopes pour des requêtes fréquentes
     public function scopeFeatured($query)
     {
         return $query->where('is_featured', true);
