@@ -20,7 +20,9 @@ class EditBrand extends EditRecord
                         Storage::disk('public')->delete($this->record->logo);
                     }
                 }),
+            Actions\ViewAction::make(),
         ];
+
     }
 
     protected function getRedirectUrl(): string
