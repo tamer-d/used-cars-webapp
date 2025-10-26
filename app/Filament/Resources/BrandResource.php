@@ -10,9 +10,10 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Filament\Infolists;
+use Filament\Infolists\Infolist;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
-
 
 class BrandResource extends Resource
 {
@@ -35,7 +36,7 @@ class BrandResource extends Resource
                     ->visibility('public')
                     ->maxSize(2048) // 2MB max
                     ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp'])
-                    ->helperText('Formats acceptés: JPG, PNG, WebP. Taille max: 2MB')
+                    ->helperText('Accepted formats: JPG, PNG, WebP. Max size: 2MB')
                     ->deleteUploadedFileUsing(fn ($file) => Storage::disk('public')->delete($file))
                     ->getUploadedFileNameForStorageUsing(
                         fn (TemporaryUploadedFile $file): string => (string) str($file->getClientOriginalName())
@@ -49,18 +50,18 @@ class BrandResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\ImageColumn::make('logo')
-    ->label('Logo')
-    ->height(60)
-    ->width(60)
-    ->circular()
-    ->getStateUsing(fn ($record) => 
-        $record->logo 
-            ? asset('storage/' . $record->logo)
-            : asset('images/default-brand.png')
-    ),
+                    ->label('Logo')
+                    ->height(60)
+                    ->width(60)
+                    ->circular()
+                    ->getStateUsing(fn ($record) => 
+                        $record->logo 
+                            ? asset('storage/' . $record->logo)
+                            : asset('images/default-brand.png')
+                    ),
                 Tables\Columns\TextColumn::make('name')
-                ->sortable()    
-                ->searchable(),
+                    ->sortable()    
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('cars_count')
                     ->counts('cars')
                     ->sortable()
@@ -104,5 +105,58 @@ class BrandResource extends Resource
             'create' => Pages\CreateBrand::route('/create'),
             'edit' => Pages\EditBrand::route('/{record}/edit'),
         ];
+    }
+
+    public static function infolist(Infolist $infolist): Infolist
+    {
+        return $infolist
+            ->schema([
+                Infolists\Components\Section::make('Brand Information')
+                    ->schema([
+                        Infolists\Components\Split::make([
+                            Infolists\Components\Grid::make(2)
+                                ->schema([
+                                    Infolists\Components\Group::make([
+                                        Infolists\Components\TextEntry::make('name')
+                                            ->label('Brand Name')
+                                            ->size(Infolists\Components\TextEntry\TextEntrySize::Large)
+                                            ->weight('bold')
+                                            ->color('primary'),
+                                            
+                                        Infolists\Components\TextEntry::make('models_count')
+                                            ->label('Number of Models')
+                                            ->getStateUsing(fn ($record) => $record->models()->count())
+                                            ->badge()
+                                            ->color('info'),
+                                            
+                                        Infolists\Components\TextEntry::make('cars_count')
+                                            ->label('Number of Cars')
+                                            ->getStateUsing(fn ($record) => $record->cars()->count())
+                                            ->badge()
+                                            ->color('success'),
+                                            
+                                        Infolists\Components\TextEntry::make('created_at')
+                                            ->label('Created At')
+                                            ->dateTime('d/m/Y at H:i'),
+                                    ]),
+                                ]),
+                                Infolists\Components\Group::make([
+                                        Infolists\Components\ImageEntry::make('logo')
+                                            ->label('Logo')
+                                            ->height(180)
+                                            ->width(180)
+                                            ->getStateUsing(function ($record) {
+                                                if ($record->logo && file_exists(public_path('storage/' . $record->logo))) {
+                                                    return asset('storage/' . $record->logo);
+                                                }
+                                                return asset('images/default-brand.svg');
+                                            })
+                                            ->hiddenLabel(),
+                            ])
+                            ->grow(false),
+                        ]),
+                    ])
+                    ->collapsible(),
+            ]);
     }
 }

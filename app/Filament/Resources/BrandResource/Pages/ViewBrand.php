@@ -13,7 +13,14 @@ class ViewBrand extends ViewRecord
     protected function getHeaderActions(): array
     {
         return [
-            Actions\EditAction::make(),
+            Actions\EditAction::make()
         ];
+    }
+    
+    protected function mutateFormDataBeforeFill(array $data): array
+    {
+        $this->record->loadCount(['models', 'cars']);
+        
+        return $data;
     }
 }
