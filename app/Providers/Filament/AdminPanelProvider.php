@@ -27,9 +27,9 @@ class AdminOnlyMiddleware
     {
         if (auth()->check() && !auth()->user()->isAdmin()) {
             auth()->logout();
-            return redirect()->back()
-    ->withErrors(['email' => 'Accès refusé...']);
+            session()->flash('admin_only_error', 'Access denied. Only privileged administrators can access this dashboard.');
 
+    return redirect()->route('filament.admin.auth.login');
 }
         return $next($request);
     }
@@ -44,6 +44,25 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login()
+            ->renderHook(
+                'panels::auth.login.form.before',
+                fn () => session('admin_only_error')
+                    ? "
+                    <div class='mb-4 p-4 rounded-xl border border-red-600 bg-red-600/10 text-red-700 flex items-start gap-3 shadow-sm'>
+                        <span class='text-red-600 text-l'>⚠️</span>
+                        <div>
+                            <div class='font-extrabold text-red-700 text-base uppercase tracking-wide'>
+                                Access Restricted !
+                            </div>
+                            <p class='text-sm leading-tight font-medium'>
+                                Only <span class='font-bold'>authorized administrators</span> are allowed to access.
+                            </p>
+                        </div>
+                    </div>
+                    "
+                    : ''
+            )
+
             ->colors([
                 'primary' => Color::Amber,
             ])
