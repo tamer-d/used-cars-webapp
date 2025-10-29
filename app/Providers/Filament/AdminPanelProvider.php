@@ -17,6 +17,23 @@ use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
+use Closure;
+use Illuminate\Http\Request;
+
+
+class AdminOnlyMiddleware
+{
+    public function handle(Request $request, Closure $next)
+    {
+        if (auth()->check() && !auth()->user()->isAdmin()) {
+            auth()->logout();
+            return redirect()->back()
+    ->withErrors(['email' => 'Accès refusé...']);
+
+}
+        return $next($request);
+    }
+}
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -53,8 +70,11 @@ class AdminPanelProvider extends PanelProvider
                 SubstituteBindings::class,
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
-                \Hasnayeen\Themes\Http\Middleware\SetTheme::class
+                \Hasnayeen\Themes\Http\Middleware\SetTheme::class,
+                AdminOnlyMiddleware::class,
             ])
+            ->authGuard('web')
+            ->loginRouteSlug('login')
             ->authMiddleware([
                 Authenticate::class,
             ]);
