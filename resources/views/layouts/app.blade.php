@@ -35,6 +35,8 @@
             {{ $slot }}
         </main>
     </div>
+    <!-- Script de gestion des timeouts -->
+    <script src="{{ asset('js/timeout-handler.js') }}"></script>
 </body>
 
 </html>

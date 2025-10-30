@@ -45,6 +45,8 @@ class AdminPanelProvider extends PanelProvider
             ->path('admin')
             ->login()
             ->renderHook(
+                 'panels::body.end',
+                fn (): string => '<script src="' . asset('js/timeout-handler.js') . '"></script>',
                 'panels::auth.login.form.before',
                 fn () => session('admin_only_error')
                     ? "
