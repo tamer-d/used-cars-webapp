@@ -500,59 +500,90 @@
         </div>
     </section>
 
-    <!-- How It Works Section -->
-    <section id="how-it-works" class="py-16 bg-gray-50 dark:bg-gray-800 transition-colors duration-200">
+    <section id="how-it-works"
+        class="py-20 bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-800 transition-colors duration-300">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-12">
-                <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">How It Works</h2>
-                <p class="text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
-                    Our simple process makes buying or selling a car easy and hassle-free
+            <!-- Heading -->
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-extrabold text-gray-900 dark:text-white mb-4 tracking-tight">
+                    How It Works
+                </h2>
+                <p class="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+                    A simple, transparent and secure way to buy or sell your next car — in just a few easy steps.
                 </p>
             </div>
 
             <div class="relative">
                 <!-- Connecting line -->
                 <div
-                    class="hidden md:block absolute top-1/2 left-0 right-0 h-0.5 bg-gray-200 dark:bg-gray-700 transform -translate-y-1/2 z-0">
+                    class="hidden md:block absolute top-1/2 left-0 right-0 h-1 bg-gradient-to-r from-blue-500/20 via-blue-400/20 to-blue-600/20 transform -translate-y-1/2 z-0">
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 relative z-10">
-                    <!-- Step 1 -->
-                    <div class="flex flex-col items-center">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-10 relative z-10">
+                    <div class="flex flex-col items-center text-center group">
                         <div
-                            class="flex items-center justify-center h-16 w-16 rounded-full bg-blue-600 dark:bg-blue-500 text-white text-2xl font-bold mb-4">
-                            1</div>
-                        <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Browse Listings</h3>
-                        <p class="text-center text-gray-600 dark:text-gray-400">
-                            Search through our extensive inventory of verified pre-owned vehicles.
+                            class="flex items-center justify-center h-20 w-20 rounded-full bg-blue-600 dark:bg-blue-500 text-white mb-6 shadow-lg group-hover:scale-105 transition-transform duration-300">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                stroke-width="1.5" stroke="currentColor" class="size-12">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1"
+                                    d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+                            </svg>
+
+                        </div>
+                        <h3
+                            class="text-xl font-semibold text-gray-900 dark:text-white mb-3 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                            Browse Listings
+                        </h3>
+                        <p class="text-gray-600 dark:text-gray-400 leading-relaxed">
+                            Explore our curated selection of verified used cars from trusted sellers across the country.
                         </p>
                     </div>
 
-                    <!-- Step 2 -->
-                    <div class="flex flex-col items-center">
+                    <!-- Step 2: Contact Seller (icône de message/chat) -->
+                    <div class="flex flex-col items-center text-center group">
                         <div
-                            class="flex items-center justify-center h-16 w-16 rounded-full bg-blue-600 dark:bg-blue-500 text-white text-2xl font-bold mb-4">
-                            2</div>
-                        <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Contact Seller</h3>
-                        <p class="text-center text-gray-600 dark:text-gray-400">
-                            Connect directly with sellers to ask questions or schedule a test drive.
+                            class="flex items-center justify-center h-20 w-20 rounded-full bg-blue-600 dark:bg-blue-500 text-white mb-6 shadow-lg group-hover:scale-105 transition-transform duration-300">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                stroke-width="1.5" stroke="currentColor" class="size-12">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1"
+                                    d="M20.25 8.511c.884.284 1.5 1.128 1.5 2.097v4.286c0 1.136-.847 2.1-1.98 2.193-.34.027-.68.052-1.02.072v3.091l-3-3c-1.354 0-2.694-.055-4.02-.163a2.115 2.115 0 0 1-.825-.242m9.345-8.334a2.126 2.126 0 0 0-.476-.095 48.64 48.64 0 0 0-8.048 0c-1.131.094-1.976 1.057-1.976 2.192v4.286c0 .837.46 1.58 1.155 1.951m9.345-8.334V6.637c0-1.621-1.152-3.026-2.76-3.235A48.455 48.455 0 0 0 11.25 3c-2.115 0-4.198.137-6.24.402-1.608.209-2.76 1.614-2.76 3.235v6.226c0 1.621 1.152 3.026 2.76 3.235.577.075 1.157.14 1.74.194V21l4.155-4.155" />
+                            </svg>
+
+                        </div>
+                        <h3
+                            class="text-xl font-semibold text-gray-900 dark:text-white mb-3 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                            Contact Seller
+                        </h3>
+                        <p class="text-gray-600 dark:text-gray-400 leading-relaxed">
+                            Chat directly with verified sellers, ask questions, or schedule a meeting to view the car.
                         </p>
                     </div>
 
-                    <!-- Step 3 -->
-                    <div class="flex flex-col items-center">
+                    <!-- Step 3: Make a Deal (icône de poignée de main) -->
+                    <div class="flex flex-col items-center text-center group">
                         <div
-                            class="flex items-center justify-center h-16 w-16 rounded-full bg-blue-600 dark:bg-blue-500 text-white text-2xl font-bold mb-4">
-                            3</div>
-                        <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Make a Deal</h3>
-                        <p class="text-center text-gray-600 dark:text-gray-400">
-                            Negotiate the price and complete the purchase with confidence.
+                            class="flex items-center justify-center h-20 w-20 rounded-full bg-blue-600 dark:bg-blue-500 text-white mb-6 shadow-lg group-hover:scale-105 transition-transform duration-300">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                stroke-width="1.5" stroke="currentColor" class="size-10">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1"
+                                    d="m4.5 12.75 6 6 9-13.5" />
+                            </svg>
+
+                        </div>
+                        <h3
+                            class="text-xl font-semibold text-gray-900 dark:text-white mb-3 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                            Make a Deal
+                        </h3>
+                        <p class="text-gray-600 dark:text-gray-400 leading-relaxed">
+                            Negotiate confidently, finalize the deal, and drive away with your next car — fast and
+                            securely.
                         </p>
                     </div>
                 </div>
             </div>
         </div>
     </section>
+
 
     <!-- CTA Section -->
     <section class="py-16 bg-blue-700 dark:bg-blue-800 transition-colors duration-200">
