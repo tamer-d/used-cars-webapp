@@ -18,7 +18,7 @@
 
 <body
     class="font-sans antialiased bg-light-background dark:bg-dark-background text-light-text dark:text-dark-text min-h-screen transition-colors duration-300">
-    <div class="min-h-screen">
+    <div class="min-h-screen flex flex-col">
         <livewire:layout.navigation />
 
         <!-- Page Heading -->
@@ -31,9 +31,12 @@
         @endif
 
         <!-- Page Content -->
-        <main class="pt-16">
+        <main class="pt-16 flex-grow">
             {{ $slot }}
         </main>
+
+        <!-- Footer -->
+        <livewire:layout.footer />
     </div>
     <!-- Script de gestion des timeouts -->
     <script src="{{ asset('js/timeout-handler.js') }}"></script>
