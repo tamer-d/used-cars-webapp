@@ -9,23 +9,23 @@
 if (darkMode) document.documentElement.classList.add('dark');"
     class="fixed top-0 w-full z-50 backdrop-blur-md bg-white/80 dark:bg-dark-background/90 shadow-sm border-b border-gray-100 dark:border-gray-800 transition-all duration-300">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between h-16">
+        <div class="flex h-16">
             <!-- Logo -->
-            <div class="flex items-center">
+            <div class="flex items-center ml-8">
                 <a href="/" wire:navigate>
                     <x-application-logo class="block h-9 w-auto fill-current text-light-text dark:text-dark-text" />
                 </a>
             </div>
 
-            <!-- Navigation Links -->
-            <div class="hidden sm:flex space-x-8">
+            <!-- Navigation Links - Positionnés plus à droite avec espace -->
+            <div class="hidden sm:flex items-center space-x-10 mx-auto mr-6">
                 <a href="/"
-                    class="text-sm font-medium text-light-text dark:text-dark-text hover:text-light-primary dark:hover:text-dark-primary transition duration-150 ease-in-out">Home</a>
+                    class="text-base font-medium text-light-text dark:text-dark-text hover:text-light-primary dark:hover:text-dark-primary transition duration-150 ease-in-out">Home</a>
                 <a href="#how-it-works"
-                    class="text-sm font-medium text-light-text dark:text-dark-text hover:text-light-primary dark:hover:text-dark-primary transition duration-150 ease-in-out">How
+                    class="text-base font-medium text-light-text dark:text-dark-text hover:text-light-primary dark:hover:text-dark-primary transition duration-150 ease-in-out">How
                     it Works</a>
                 <a href="#contact-us"
-                    class="text-sm font-medium text-light-text dark:text-dark-text hover:text-light-primary dark:hover:text-dark-primary transition duration-150 ease-in-out">Contact
+                    class="text-base font-medium text-light-text dark:text-dark-text hover:text-light-primary dark:hover:text-dark-primary transition duration-150 ease-in-out">Contact
                     Us</a>
             </div>
 
@@ -76,7 +76,7 @@ if (darkMode) document.documentElement.classList.add('dark');"
             </div>
 
             <!-- Mobile Hamburger Menu -->
-            <div class="sm:hidden flex items-center">
+            <div class="sm:hidden ml-auto flex items-center">
                 <button @click="open = !open"
                     class="p-2 rounded-md text-light-text dark:text-dark-text hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none">
                     <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -95,32 +95,32 @@ if (darkMode) document.documentElement.classList.add('dark');"
         class="sm:hidden bg-white dark:bg-gray-800 border-t border-gray-100 dark:border-gray-700">
         <div class="space-y-1">
             <a href="/"
-                class="block px-4 py-2 text-sm font-medium text-light-text dark:text-dark-text hover:bg-gray-100 dark:hover:bg-gray-700">Home</a>
+                class="block px-4 py-2 text-base font-medium text-light-text dark:text-dark-text hover:bg-gray-100 dark:hover:bg-gray-700">Home</a>
             <a href="#how-it-works"
-                class="block px-4 py-2 text-sm font-medium text-light-text dark:text-dark-text hover:bg-gray-100 dark:hover:bg-gray-700">How
+                class="block px-4 py-2 text-base font-medium text-light-text dark:text-dark-text hover:bg-gray-100 dark:hover:bg-gray-700">How
                 it Works</a>
             <a href="#contact-us"
-                class="block px-4 py-2 text-sm font-medium text-light-text dark:text-dark-text hover:bg-gray-100 dark:hover:bg-gray-700">Contact
+                class="block px-4 py-2 text-base font-medium text-light-text dark:text-dark-text hover:bg-gray-100 dark:hover:bg-gray-700">Contact
                 Us</a>
         </div>
 
         @auth
             <div class="border-t border-gray-100 dark:border-gray-700 space-y-1">
                 <a href="{{ route('profile') }}"
-                    class="block px-4 py-2 text-sm font-medium text-light-text dark:text-dark-text hover:bg-gray-100 dark:hover:bg-gray-700">My
+                    class="block px-4 py-2 text-base font-medium text-light-text dark:text-dark-text hover:bg-gray-100 dark:hover:bg-gray-700">My
                     Profile</a>
 
                 <a href="{{ route('messages.index') }}"
-                    class="block px-4 py-2 text-sm font-medium text-light-text dark:text-dark-text hover:bg-gray-100 dark:hover:bg-gray-700">Messages</a>
+                    class="block px-4 py-2 text-base font-medium text-light-text dark:text-dark-text hover:bg-gray-100 dark:hover:bg-gray-700">Messages</a>
                 <a href="#" @click.prevent="logout"
-                    class="block px-4 py-2 text-sm font-medium text-light-text dark:text-dark-text hover:bg-gray-100 dark:hover:bg-gray-700">Logout</a>
+                    class="block px-4 py-2 text-base font-medium text-light-text dark:text-dark-text hover:bg-gray-100 dark:hover:bg-gray-700">Logout</a>
             </div>
         @else
             <div class="border-t border-gray-100 dark:border-gray-700 space-y-1">
                 <a href="{{ route('login') }}"
-                    class="block px-4 py-2 text-sm font-medium text-light-text dark:text-dark-text hover:bg-gray-100 dark:hover:bg-gray-700">Login</a>
+                    class="block px-4 py-2 text-base font-medium text-light-text dark:text-dark-text hover:bg-gray-100 dark:hover:bg-gray-700">Login</a>
                 <a href="{{ route('register') }}"
-                    class="block px-4 py-2 text-sm font-medium text-light-text dark:text-dark-text hover:bg-gray-100 dark:hover:bg-gray-700">Get
+                    class="block px-4 py-2 text-base font-medium text-light-text dark:text-dark-text hover:bg-gray-100 dark:hover:bg-gray-700">Get
                     Started</a>
             </div>
         @endauth
