@@ -242,7 +242,7 @@
                         class="px-8 py-4 bg-white text-blue-600 text-lg font-semibold rounded-lg hover:bg-gray-100 transition duration-300 transform hover:scale-105 hover:shadow-xl">
                         How It Works ?
                     </a>
-                    <a href="#listings"
+                    <a href="{{ route('cars.index') }}"
                         class="px-8 py-4 bg-blue-600 text-white text-lg font-semibold rounded-lg hover:bg-blue-700 transition duration-300 transform hover:scale-105 hover:shadow-xl">
                         Browse Cars
                     </a>
@@ -302,9 +302,10 @@
                         </div>
                     </form>
                     <div class="mt-3 flex justify-center">
-                        <button type="button" class="text-blue-600 dark:text-blue-400 text-sm hover:underline">
+                        <a href="{{ route('cars.index') }}"
+                            class="text-blue-600 dark:text-blue-400 text-sm hover:underline">
                             Advanced Search
-                        </button>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -426,9 +427,9 @@
             </div>
 
             <div class="mt-12 text-center">
-                <a href="#"
+                <a href="{{ route('cars.index') }}"
                     class="inline-flex items-center bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white font-bold py-3 px-8 rounded-lg text-lg transition duration-300">
-                    View All Listings
+                    View All Offers
                     <svg class="ml-2 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M17 8l4 4m0 0l-4 4m4-4H3" />
