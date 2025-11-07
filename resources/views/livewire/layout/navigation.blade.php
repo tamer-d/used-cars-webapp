@@ -18,7 +18,7 @@ if (darkMode) document.documentElement.classList.add('dark');"
             </div>
 
             <!-- Navigation Links - Positionnés plus à droite avec espace -->
-            <div class="hidden sm:flex items-center space-x-10 mx-auto mr-6">
+            <div class="hidden sm:flex items-center space-x-10 mx-auto mr-16">
                 <a href="/"
                     class="text-base font-medium text-light-text dark:text-dark-text hover:text-light-primary dark:hover:text-dark-primary transition duration-150 ease-in-out">Home</a>
                 <a href="#how-it-works"
@@ -60,9 +60,14 @@ if (darkMode) document.documentElement.classList.add('dark');"
 
                         <x-slot name="content">
                             <x-dropdown-link :href="route('profile')">My Profile</x-dropdown-link>
-
                             <x-dropdown-link :href="route('messages.index')">Messages</x-dropdown-link>
-                            <x-dropdown-link href="#" @click.prevent="logout">Logout</x-dropdown-link>
+                            <form method="POST" action="{{ route('logout') }}">
+                                @csrf
+                                <x-dropdown-link :href="route('logout')"
+                                    onclick="event.preventDefault(); this.closest('form').submit();">
+                                    Logout
+                                </x-dropdown-link>
+                            </form>
                         </x-slot>
                     </x-dropdown>
                 @else
@@ -75,7 +80,6 @@ if (darkMode) document.documentElement.classList.add('dark');"
                 @endauth
             </div>
 
-            <!-- Mobile Hamburger Menu -->
             <div class="sm:hidden ml-auto flex items-center">
                 <button @click="open = !open"
                     class="p-2 rounded-md text-light-text dark:text-dark-text hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none">
@@ -90,7 +94,7 @@ if (darkMode) document.documentElement.classList.add('dark');"
         </div>
     </div>
 
-    <!-- Mobile Menu -->
+
     <div :class="{ 'block': open, 'hidden': !open }"
         class="sm:hidden bg-white dark:bg-gray-800 border-t border-gray-100 dark:border-gray-700">
         <div class="space-y-1">
@@ -109,11 +113,16 @@ if (darkMode) document.documentElement.classList.add('dark');"
                 <a href="{{ route('profile') }}"
                     class="block px-4 py-2 text-base font-medium text-light-text dark:text-dark-text hover:bg-gray-100 dark:hover:bg-gray-700">My
                     Profile</a>
-
                 <a href="{{ route('messages.index') }}"
                     class="block px-4 py-2 text-base font-medium text-light-text dark:text-dark-text hover:bg-gray-100 dark:hover:bg-gray-700">Messages</a>
-                <a href="#" @click.prevent="logout"
-                    class="block px-4 py-2 text-base font-medium text-light-text dark:text-dark-text hover:bg-gray-100 dark:hover:bg-gray-700">Logout</a>
+
+                <form method="POST" action="{{ route('logout') }}">
+                    @csrf
+                    <button type="submit"
+                        class="w-full text-left block px-4 py-2 text-base font-medium text-light-text dark:text-dark-text hover:bg-gray-100 dark:hover:bg-gray-700">
+                        Logout
+                    </button>
+                </form>
             </div>
         @else
             <div class="border-t border-gray-100 dark:border-gray-700 space-y-1">
