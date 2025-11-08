@@ -247,52 +247,86 @@
                         Browse Cars
                     </a>
                 </div>
-
-                <!-- Barre de recherche (maintenant en bas) -->
+                <!-- Barre de recherche avec logos des marques (version AlpineJS avec récupération des marques dans la vue) -->
                 <div
                     class="w-full max-w-4xl mx-auto bg-white/95 dark:bg-gray-800/95 rounded-xl shadow-2xl p-6 backdrop-blur-sm animate-fade-in-up">
-                    <form class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                        <div>
-                            <label for="make"
+                    @php
+                        use App\Models\Brand;
+                        $brands = Brand::withCount('cars')->orderBy('cars_count', 'desc')->get();
+                    @endphp
+
+                    <form action="{{ route('cars.index') }}" method="GET"
+                        class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                        <div x-data="{ open: false, selectedBrand: '', selectedBrandId: '' }">
+                            <label
                                 class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 text-left">Make</label>
-                            <select id="make" name="make"
+                            <div class="relative">
+                                <button type="button" @click="open = !open"
+                                    class="w-full flex items-center justify-between rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 px-3 py-2 text-gray-900 dark:text-white shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                                    <span x-text="selectedBrand || 'Any Make'"></span>
+                                    <svg class="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd"
+                                            d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                            clip-rule="evenodd" />
+                                    </svg>
+                                </button>
+                                <input type="hidden" name="brand_id" x-model="selectedBrandId">
+
+                                <div x-show="open" @click.away="open = false"
+                                    class="absolute z-10 mt-1 w-full rounded-md bg-white dark:bg-gray-800 shadow-lg max-h-60 overflow-auto">
+                                    <div class="py-1">
+                                        <button type="button"
+                                            @click="selectedBrand = 'Any Make'; selectedBrandId = ''; open = false"
+                                            class="w-full text-left px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700">
+                                            Any Make
+                                        </button>
+
+                                        @foreach ($brands as $brand)
+                                            <button type="button"
+                                                @click="selectedBrand = '{{ $brand->name }}'; selectedBrandId = '{{ $brand->id }}'; open = false"
+                                                class="w-full text-left px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center">
+                                                @if ($brand->logo)
+                                                    <img src="{{ asset('storage/' . $brand->logo) }}"
+                                                        alt="{{ $brand->name }}" class="w-5 h-5 mr-2">
+                                                @else
+                                                    <img src="{{ asset('images/default-brand.png') }}"
+                                                        alt="{{ $brand->name }}" class="w-5 h-5 mr-2">
+                                                @endif
+                                                {{ $brand->name }}
+                                            </button>
+                                        @endforeach
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label for="min_year"
+                                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 text-left">Year</label>
+                            <select id="min_year" name="min_year"
                                 class="w-full rounded-lg border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-white shadow-sm focus:ring-blue-500 focus:border-blue-500">
-                                <option>Any Make</option>
-                                <option>Toyota</option>
-                                <option>Honda</option>
-                                <option>BMW</option>
-                                <option>Mercedes</option>
-                                <option>Ford</option>
+                                <option value="">Any Year</option>
+                                @foreach (range(date('Y'), 1980, -5) as $year)
+                                    <option value="{{ $year }}">{{ $year }} or newer</option>
+                                @endforeach
                             </select>
                         </div>
+
                         <div>
-                            <label for="price"
+                            <label for="max_mileage"
                                 class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 text-left">Max
-                                Price</label>
-                            <select id="price" name="price"
+                                Mileage</label>
+                            <select id="max_mileage" name="max_mileage"
                                 class="w-full rounded-lg border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-white shadow-sm focus:ring-blue-500 focus:border-blue-500">
-                                <option>Any Price</option>
-                                <option>$5,000</option>
-                                <option>$10,000</option>
-                                <option>$25,000</option>
-                                <option>$50,000</option>
-                                <option>$100,000+</option>
+                                <option value="">Any Mileage</option>
+                                <option value="10000">Under 10,000 km</option>
+                                <option value="50000">Under 50,000 km</option>
+                                <option value="100000">Under 100,000 km</option>
+                                <option value="150000">Under 150,000 km</option>
+                                <option value="200000">Under 200,000 km</option>
                             </select>
                         </div>
-                        <div>
-                            <label for="bodyType"
-                                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 text-left">Body
-                                Type</label>
-                            <select id="bodyType" name="bodyType"
-                                class="w-full rounded-lg border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-white shadow-sm focus:ring-blue-500 focus:border-blue-500">
-                                <option>Any Type</option>
-                                <option>Sedan</option>
-                                <option>SUV</option>
-                                <option>Coupe</option>
-                                <option>Truck</option>
-                                <option>Van</option>
-                            </select>
-                        </div>
+
                         <div>
                             <label class="invisible block text-sm font-medium mb-1">Search</label>
                             <button type="submit"
@@ -301,6 +335,7 @@
                             </button>
                         </div>
                     </form>
+
                     <div class="mt-3 flex justify-center">
                         <a href="{{ route('cars.index') }}"
                             class="text-blue-600 dark:text-blue-400 text-sm hover:underline">

@@ -222,11 +222,16 @@ class CarController extends Controller
             ->latest()
             ->take(8)
             ->get();
-            
-        $brands = Brand::withCount('cars')->orderBy('cars_count', 'desc')->take(10)->get();
-        $categories = Category::withCount('cars')->orderBy('cars_count', 'desc')->get();
         
-        return view('home', compact('featuredCars', 'recentCars', 'brands', 'categories'));
+        $brands = Brand::withCount('cars')
+        ->orderBy('cars_count', 'desc')
+        ->get();
+
+        $categories = Category::withCount('cars')
+        ->orderBy('cars_count', 'desc')
+        ->get();
+
+        return view('welcome', compact('featuredCars', 'recentCars', 'brands', 'categories'));
     }
 
     public function byCategory(Category $category)
