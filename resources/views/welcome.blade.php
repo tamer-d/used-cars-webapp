@@ -62,8 +62,7 @@
                     </a>
 
                     @auth
-                        <a href="{{ url('/dashboard') }}"
-                            class="text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">Dashboard</a>
+
                         <!-- Logout Form -->
                         <form method="POST" action="{{ route('logout') }}" class="inline">
                             @csrf
@@ -109,10 +108,6 @@
                         </a>
 
                         @auth
-                            <a href="{{ url('/dashboard') }}"
-                                class="block px-3 py-2 rounded-md text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-700">
-                                Dashboard
-                            </a>
                             <!-- Logout Form (mobile) -->
                             <form method="POST" action="{{ route('logout') }}" class="block">
                                 @csrf
@@ -181,9 +176,6 @@
                     class="block px-3 py-2 rounded-md text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-700">About</a>
 
                 @auth
-                    <a href="{{ url('/dashboard') }}"
-                        class="block px-3 py-2 rounded-md text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-700">Dashboard</a>
-
                     <!-- Logout Form (mobile) -->
                     <form method="POST" action="{{ route('logout') }}" class="block">
                         @csrf

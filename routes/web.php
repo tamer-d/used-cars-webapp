@@ -17,10 +17,6 @@ Route::view('profile', 'profile')
 
 require __DIR__.'/auth.php';
 
-// Routes publiques pour les voitures
-Route::get('/cars', [CarController::class, 'index'])->name('cars.index');
-Route::get('/cars/{car}', [CarController::class, 'show'])->name('cars.show');
-
 // Routes protégées par authentification
 Route::middleware(['auth'])->group(function () {
     // Routes pour les voitures (utilisateurs connectés)
@@ -30,6 +26,10 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/cars/{car}', [CarController::class, 'update'])->name('cars.update');
     Route::delete('/cars/{car}', [CarController::class, 'destroy'])->name('cars.destroy');
     Route::get('/my-cars', [CarController::class, 'myCars'])->name('cars.my-cars');
+    
+    // Routes publiques pour les voitures
+    Route::get('/cars', [CarController::class, 'index'])->name('cars.index');
+    Route::get('/cars/{car}', [CarController::class, 'show'])->name('cars.show');
     
     // Routes pour les favoris
     Route::get('/favorites', [FavoriteController::class, 'index'])->name('favorites.index');
@@ -58,4 +58,4 @@ Route::get('/contact', function () {
     return view('pages.contact');
 })->name('contact');
 
-Route::get('/api/models-by-brand', [CarController::class, 'getModelsByBrand'])->name('api.models-by-brand');
+Route::get('/api/models-by-brand', [CarController::class, 'getModelsByBrand'])->name('cars.models.by.brand');
