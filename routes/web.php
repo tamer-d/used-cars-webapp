@@ -58,4 +58,4 @@ Route::get('/contact', function () {
     return view('pages.contact');
 })->name('contact');
 
-Route::get('/api/models-by-brand', [CarController::class, 'getModelsByBrand'])->name('cars.models.by.brand');
+Route::get('/api/models-by-brand', [CarController::class, 'getModelsByBrand'])->name('api.models-by-brand');
