@@ -31,7 +31,7 @@
                 <!-- Block 1: Vehicle Information -->
                 <div class="bg-white dark:bg-gray-800 shadow-md rounded-lg p-6 mb-6">
                     <div class="flex items-center mb-4">
-                        <div class="bg-blue-100 dark:bg-blue-900 p-2 rounded-full mr-3">
+                        <div class="bg-blue-100 dark:bg-blue-900 p-1 rounded-full mr-2">
                             <svg class="w-6 h-6 text-blue-600 dark:text-blue-300" fill="none" stroke="currentColor"
                                 viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -159,7 +159,7 @@
                 <!-- Block 2: Listing Details -->
                 <div class="bg-white dark:bg-gray-800 shadow-md rounded-lg p-6 mb-6">
                     <div class="flex items-center mb-4">
-                        <div class="bg-green-100 dark:bg-green-900 p-2 rounded-full mr-3">
+                        <div class="bg-green-100 dark:bg-green-900 p-1 rounded-full mr-2">
                             <svg class="w-6 h-6 text-green-600 dark:text-green-300" fill="none"
                                 stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
