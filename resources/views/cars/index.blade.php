@@ -402,8 +402,7 @@
                                     <!-- Image -->
                                     <div class="relative h-48 bg-gray-200 dark:bg-gray-700 overflow-hidden">
                                         @if ($car->images->count() > 0)
-                                            <img src="{{ Storage::url($car->images->first()->path) }}"
-                                                alt="{{ $car->title }}"
+                                            <img src="{{ $car->images->first()->url }}" alt="{{ $car->title }}"
                                                 class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
                                         @else
                                             <div class="w-full h-full flex items-center justify-center">
