@@ -10,6 +10,7 @@ use App\Models\Feature;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class CarController extends Controller
 {
@@ -261,94 +262,258 @@ class CarController extends Controller
     }
 
     public function create()
-{
-    // Récupérer les marques pour le formulaire
-    $brands = Brand::orderBy('name')->get();
-    
-    // Récupérer les catégories pour le formulaire
-    $categories = Category::orderBy('name')->get();
-    
-    // Récupérer les caractéristiques disponibles
-    $features = Feature::orderBy('name')->get();
-    
-    return view('cars.create', compact('brands', 'categories', 'features'));
-}
-
-public function store(Request $request)
-{
-    // Validation des données du formulaire
-    $validated = $request->validate([
-        'title' => 'required|string|max:255',
-        'description' => 'required|string',
-        'price' => 'required|numeric|min:0',
-        'brand_id' => 'required|exists:brands,id',
-        'model_id' => 'required|exists:car_models,id',
-        'category_id' => 'required|exists:categories,id',
-        'year' => 'required|integer|min:1900|max:' . (date('Y') + 1),
-        'mileage' => 'required|integer|min:0',
-        'fuel_type' => 'required|string',
-        'transmission' => 'required|string',
-        'location' => 'required|string|max:255',
-        'features' => 'nullable|array',
-        'features.*' => 'exists:features,id',
-        'images' => 'required|array|min:1|max:10',
-        'images.*' => 'image|mimes:jpeg,png,webp|max:5120', // 5MB max
-    ]);
-    
-    // Créer l'annonce
-    $car = Car::create([
-        'user_id' => Auth::id(),
-        'title' => $validated['title'],
-        'description' => $validated['description'],
-        'price' => $validated['price'],
-        'brand_id' => $validated['brand_id'],
-        'model_id' => $validated['model_id'],
-        'category_id' => $validated['category_id'],
-        'year' => $validated['year'],
-        'mileage' => $validated['mileage'],
-        'fuel_type' => $validated['fuel_type'],
-        'transmission' => $validated['transmission'],
-        'location' => $validated['location'],
-        'is_featured' => false, // Par défaut, l'annonce n'est pas mise en avant
-        'views_count' => 0,
-    ]);
-    
-    // Associer les caractéristiques
-    if (isset($validated['features'])) {
-        $car->features()->attach($validated['features']);
-    }
-    
-    // Traiter les images
-    if ($request->hasFile('images')) {
-        $this->uploadCarImages($car, $request->file('images'));
-    }
-    
-    return redirect()->route('cars.show', $car)
-        ->with('success', 'Votre annonce a été publiée avec succès!');
-}
-
-/**
- * Upload et enregistre les images d'une voiture
- *
- * @param Car $car
- * @param array $images
- * @return void
- */
-private function uploadCarImages(Car $car, array $images)
-{
-    foreach ($images as $image) {
-        // Générer un nom unique pour l'image
-        $filename = 'car-' . $car->id . '-' . uniqid() . '.' . $image->getClientOriginalExtension();
+    {
+        // Récupérer les marques pour le formulaire
+        $brands = Brand::orderBy('name')->get();
         
-        // Stocker l'image
-        $path = $image->storeAs('cars', $filename, 'public');
+        // Récupérer les catégories pour le formulaire
+        $categories = Category::orderBy('name')->get();
         
-        // Créer l'enregistrement dans la base de données
-        $car->images()->create([
-            'path' => $path,
-            'main' => $car->images()->count() === 0, // La première image est définie comme principale
+        // Récupérer les caractéristiques disponibles
+        $features = Feature::orderBy('name')->get();
+        
+        return view('cars.create', compact('brands', 'categories', 'features'));
+    }
+
+    public function store(Request $request)
+    {
+        // Validation des données du formulaire
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'required|string',
+            'price' => 'required|numeric|min:0',
+            'brand_id' => 'required|exists:brands,id',
+            'model_id' => 'required|exists:car_models,id',
+            'category_id' => 'required|exists:categories,id',
+            'year' => 'required|integer|min:1900|max:' . (date('Y') + 1),
+            'mileage' => 'required|integer|min:0',
+            'fuel_type' => 'required|string',
+            'transmission' => 'required|string',
+            'location' => 'required|string|max:255',
+            'color' => 'required|string|max:50',
+            'doors' => 'required|integer|in:2,3,4,5',
+            'engine_size' => 'nullable|string|max:20',
+            'power' => 'nullable|integer|min:0',
+            'features' => 'nullable|array',
+            'features.*' => 'exists:features,id',
+            'images' => 'required|array|min:1|max:10',
+            'images.*' => 'image|mimes:jpeg,png,webp|max:5120', // 5MB max
         ]);
+        
+        // Créer l'annonce
+        $car = Car::create([
+            'user_id' => Auth::id(),
+            'title' => $validated['title'],
+            'description' => $validated['description'],
+            'price' => $validated['price'],
+            'brand_id' => $validated['brand_id'],
+            'model_id' => $validated['model_id'],
+            'category_id' => $validated['category_id'],
+            'year' => $validated['year'],
+            'mileage' => $validated['mileage'],
+            'fuel_type' => $validated['fuel_type'],
+            'transmission' => $validated['transmission'],
+            'location' => $validated['location'],
+            'color' => $validated['color'],
+            'doors' => $validated['doors'],
+            'engine_size' => $validated['engine_size'] ?? null,
+            'power' => $validated['power'] ?? null,
+            'is_featured' => false, // Par défaut, l'annonce n'est pas mise en avant
+            'views_count' => 0,
+        ]);
+        
+        // Associer les caractéristiques
+        if (isset($validated['features'])) {
+            $car->features()->attach($validated['features']);
+        }
+        
+        // Traiter les images
+        if ($request->hasFile('images')) {
+            $this->uploadCarImages($car, $request->file('images'));
+        }
+        
+        return redirect()->route('cars.show', $car)
+            ->with('success', 'Votre annonce a été publiée avec succès!');
     }
-}
 
+    public function edit(Car $car)
+    {
+        // Vérifier que l'utilisateur est bien le propriétaire de l'annonce
+        if ($car->user_id !== Auth::id()) {
+            abort(403, 'Vous n\'êtes pas autorisé à modifier cette annonce.');
+        }
+        
+        // Récupérer les données nécessaires pour le formulaire
+        $brands = Brand::orderBy('name')->get();
+        $categories = Category::orderBy('name')->get();
+        $features = Feature::orderBy('name')->get();
+        $models = CarModel::where('brand_id', $car->brand_id)->orderBy('name')->get();
+        
+        // Récupérer les IDs des caractéristiques déjà associées
+        $selectedFeatures = $car->features->pluck('id')->toArray();
+        
+        return view('cars.edit', compact('car', 'brands', 'categories', 'features', 'models', 'selectedFeatures'));
+    }
+
+    public function update(Request $request, Car $car)
+    {
+        // Vérifier que l'utilisateur est bien le propriétaire de l'annonce
+        if ($car->user_id !== Auth::id()) {
+            abort(403, 'Vous n\'êtes pas autorisé à modifier cette annonce.');
+        }
+        
+        // Validation des données du formulaire
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'required|string',
+            'price' => 'required|numeric|min:0',
+            'brand_id' => 'required|exists:brands,id',
+            'model_id' => 'required|exists:car_models,id',
+            'category_id' => 'required|exists:categories,id',
+            'year' => 'required|integer|min:1900|max:' . (date('Y') + 1),
+            'mileage' => 'required|integer|min:0',
+            'fuel_type' => 'required|string',
+            'transmission' => 'required|string',
+            'location' => 'required|string|max:255',
+            'color' => 'required|string|max:50',
+            'doors' => 'required|integer|in:2,3,4,5',
+            'engine_size' => 'nullable|string|max:20',
+            'power' => 'nullable|integer|min:0',
+            'features' => 'nullable|array',
+            'features.*' => 'exists:features,id',
+            'images' => 'nullable|array|max:10',
+            'images.*' => 'image|mimes:jpeg,png,webp|max:5120', // 5MB max
+            'delete_images' => 'nullable|array',
+            'delete_images.*' => 'integer|exists:car_images,id',
+        ]);
+        
+        // Mettre à jour l'annonce
+        $car->update([
+            'title' => $validated['title'],
+            'description' => $validated['description'],
+            'price' => $validated['price'],
+            'brand_id' => $validated['brand_id'],
+            'model_id' => $validated['model_id'],
+            'category_id' => $validated['category_id'],
+            'year' => $validated['year'],
+            'mileage' => $validated['mileage'],
+            'fuel_type' => $validated['fuel_type'],
+            'transmission' => $validated['transmission'],
+            'location' => $validated['location'],
+            'color' => $validated['color'],
+            'doors' => $validated['doors'],
+            'engine_size' => $validated['engine_size'] ?? null,
+            'power' => $validated['power'] ?? null,
+        ]);
+        
+        // Mettre à jour les caractéristiques
+        if (isset($validated['features'])) {
+            $car->features()->sync($validated['features']);
+        } else {
+            $car->features()->detach();
+        }
+        
+        // Supprimer les images sélectionnées
+        if (isset($validated['delete_images']) && is_array($validated['delete_images'])) {
+            foreach ($validated['delete_images'] as $imageId) {
+                $image = $car->images()->find($imageId);
+                if ($image) {
+                    // Supprimer le fichier physique
+                    Storage::disk('public')->delete($image->path);
+                    // Supprimer l'enregistrement
+                    $image->delete();
+                }
+            }
+        }
+        
+        // Ajouter de nouvelles images si nécessaire
+        if ($request->hasFile('images')) {
+            // Vérifier que le nombre total d'images ne dépasse pas 10
+            $currentImagesCount = $car->images()->count();
+            $newImagesCount = count($request->file('images'));
+            
+            if ($currentImagesCount + $newImagesCount <= 10) {
+                $this->uploadCarImages($car, $request->file('images'));
+            } else {
+                return redirect()->back()->withErrors(['images' => 'Le nombre total d\'images ne peut pas dépasser 10.']);
+            }
+        }
+        
+        return redirect()->route('cars.show', $car)
+            ->with('success', 'Votre annonce a été mise à jour avec succès!');
+    }
+
+    public function destroy(Car $car)
+    {
+        // Vérifier que l'utilisateur est bien le propriétaire de l'annonce
+        if ($car->user_id !== Auth::id() && !Auth::user()->is_admin) {
+            abort(403, 'Vous n\'êtes pas autorisé à supprimer cette annonce.');
+        }
+        
+        // Supprimer les images associées
+        foreach ($car->images as $image) {
+            Storage::disk('public')->delete($image->path);
+        }
+        
+        // Supprimer l'annonce (les relations seront supprimées automatiquement grâce aux contraintes de clé étrangère)
+        $car->delete();
+        
+        return redirect()->route('cars.my-cars')
+            ->with('success', 'Votre annonce a été supprimée avec succès.');
+    }
+
+    public function toggleFavorite(Car $car)
+    {
+        $user = Auth::user();
+        
+        // Vérifier si la voiture est déjà dans les favoris
+        $favorite = $user->favorites()->where('car_id', $car->id)->first();
+        
+        if ($favorite) {
+            // Supprimer des favoris
+            $favorite->delete();
+            $message = 'Annonce retirée de vos favoris.';
+        } else {
+            // Ajouter aux favoris
+            $user->favorites()->create(['car_id' => $car->id]);
+            $message = 'Annonce ajoutée à vos favoris.';
+        }
+        
+        if (request()->ajax()) {
+            return response()->json(['message' => $message]);
+        }
+        
+        return back()->with('success', $message);
+    }
+
+    public function favorites()
+    {
+        $favorites = Auth::user()->favorites()->with(['car.brand', 'car.model', 'car.images'])->latest()->paginate(12);
+        
+        return view('cars.favorites', compact('favorites'));
+    }
+
+    /**
+     * Upload et enregistre les images d'une voiture
+     *
+     * @param Car $car
+     * @param array $images
+     * @return void
+     */
+    private function uploadCarImages(Car $car, array $images)
+    {
+        foreach ($images as $image) {
+            // Générer un nom unique pour l'image
+            $filename = 'car-' . $car->id . '-' . uniqid() . '.' . $image->getClientOriginalExtension();
+            
+            // Stocker l'image
+            $path = $image->storeAs('cars', $filename, 'public');
+            
+            // Créer l'enregistrement dans la base de données
+            $car->images()->create([
+                'path' => $path,
+                'main' => $car->images()->count() === 0, // La première image est définie comme principale
+            ]);
+        }
+    }
 }
