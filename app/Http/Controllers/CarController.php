@@ -276,41 +276,41 @@ class CarController extends Controller
 
 public function store(Request $request)
 {
+    // Validation des données du formulaire
     $validated = $request->validate([
         'title' => 'required|string|max:255',
         'description' => 'required|string',
         'price' => 'required|numeric|min:0',
+        'brand_id' => 'required|exists:brands,id',
+        'model_id' => 'required|exists:car_models,id',
+        'category_id' => 'required|exists:categories,id',
         'year' => 'required|integer|min:1900|max:' . (date('Y') + 1),
         'mileage' => 'required|integer|min:0',
         'fuel_type' => 'required|string',
         'transmission' => 'required|string',
-        'brand_id' => 'required|exists:brands,id',
-        'model_id' => 'required|exists:car_models,id',
-        'category_id' => 'required|exists:categories,id',
         'location' => 'required|string|max:255',
         'features' => 'nullable|array',
         'features.*' => 'exists:features,id',
         'images' => 'required|array|min:1|max:10',
-        'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+        'images.*' => 'image|mimes:jpeg,png,webp|max:5120', // 5MB max
     ]);
     
-    // Création de l'annonce
+    // Créer l'annonce
     $car = Car::create([
         'user_id' => Auth::id(),
         'title' => $validated['title'],
         'description' => $validated['description'],
         'price' => $validated['price'],
+        'brand_id' => $validated['brand_id'],
+        'model_id' => $validated['model_id'],
+        'category_id' => $validated['category_id'],
         'year' => $validated['year'],
         'mileage' => $validated['mileage'],
         'fuel_type' => $validated['fuel_type'],
         'transmission' => $validated['transmission'],
-        'brand_id' => $validated['brand_id'],
-        'model_id' => $validated['model_id'],
-        'category_id' => $validated['category_id'],
         'location' => $validated['location'],
-        'is_published' => true,
-        'is_featured' => false,
-        'view_count' => 0
+        'is_featured' => false, // Par défaut, l'annonce n'est pas mise en avant
+        'views_count' => 0,
     ]);
     
     // Associer les caractéristiques
@@ -318,22 +318,37 @@ public function store(Request $request)
         $car->features()->attach($validated['features']);
     }
     
-    // Traitement des images
+    // Traiter les images
     if ($request->hasFile('images')) {
-        foreach ($request->file('images') as $image) {
-            $path = $image->store('car-images', 'public');
-            
-            CarImage::create([
-                'car_id' => $car->id,
-                'path' => $path,
-                'is_primary' => false 
-            ]);
-        }
-        
-        // Définir la première image comme principale
-        $car->images()->first()->update(['is_primary' => true]);
+        $this->uploadCarImages($car, $request->file('images'));
     }
     
-    return redirect()->route('cars.index')->with('success', 'Votre annonce a été publiée avec succès');
+    return redirect()->route('cars.show', $car)
+        ->with('success', 'Votre annonce a été publiée avec succès!');
 }
+
+/**
+ * Upload et enregistre les images d'une voiture
+ *
+ * @param Car $car
+ * @param array $images
+ * @return void
+ */
+private function uploadCarImages(Car $car, array $images)
+{
+    foreach ($images as $image) {
+        // Générer un nom unique pour l'image
+        $filename = 'car-' . $car->id . '-' . uniqid() . '.' . $image->getClientOriginalExtension();
+        
+        // Stocker l'image
+        $path = $image->storeAs('cars', $filename, 'public');
+        
+        // Créer l'enregistrement dans la base de données
+        $car->images()->create([
+            'path' => $path,
+            'main' => $car->images()->count() === 0, // La première image est définie comme principale
+        ]);
+    }
+}
+
 }

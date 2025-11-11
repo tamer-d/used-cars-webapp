@@ -244,10 +244,10 @@
 
                     <div>
                         <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                            Vehicle Photos *
+                            Photos du véhicule *
                         </label>
                         <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">
-                            Add at least one photo of your vehicle. You can add up to 10.
+                            Ajoutez au moins une photo de votre véhicule. Vous pouvez en ajouter jusqu'à 10.
                         </p>
 
                         <div class="mt-2 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 dark:border-gray-700 border-dashed rounded-md"
@@ -260,28 +260,36 @@
                                         stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                                 </svg>
                                 <div class="flex text-sm text-gray-600 dark:text-gray-400">
-                                    <label for="images"
+                                    <label for="file-upload"
                                         class="relative cursor-pointer bg-white dark:bg-gray-800 rounded-md font-medium text-blue-600 dark:text-blue-400 hover:text-blue-500 focus-within:outline-none">
-                                        <span>Upload Files</span>
-                                        <input id="images" name="images[]" type="file" class="sr-only"
+                                        <span>Télécharger des fichiers</span>
+                                        <input id="file-upload" name="file-upload" type="file" class="sr-only"
                                             multiple accept="image/*">
                                     </label>
-                                    <p class="pl-1">or drag and drop</p>
+                                    <p class="pl-1">ou glisser-déposer</p>
                                 </div>
                                 <p class="text-xs text-gray-500 dark:text-gray-400">
-                                    PNG, JPG, WEBP up to 5MB
+                                    PNG, JPG, WEBP jusqu'à 5MB
                                 </p>
                             </div>
                         </div>
 
                         <div id="preview-container" class="mt-4 grid grid-cols-2 md:grid-cols-4 gap-4">
-                            <!-- Image previews will be added here dynamically -->
+                            <!-- Les aperçus des images seront ajoutés ici dynamiquement -->
+                        </div>
+
+                        <div id="image-count" class="mt-2 text-sm text-gray-500 dark:text-gray-400">
+                            0 image(s) sélectionnée(s)
                         </div>
 
                         <div id="error-container" class="mt-2 text-red-500 text-sm hidden"></div>
+
+                        <!-- Champ caché qui contiendra les images sélectionnées -->
+                        <div id="images-container">
+                            <!-- Les inputs seront générés dynamiquement ici -->
+                        </div>
                     </div>
                 </div>
-
 
                 <div class="flex items-center justify-between mt-8">
                     <a href="{{ route('cars.index') }}"
@@ -306,11 +314,12 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Manage model selection based on brand
+            // Code existant pour la gestion des modèles
             const brandSelect = document.getElementById('brand_id');
             const modelSelect = document.getElementById('model_id');
 
             brandSelect.addEventListener('change', function() {
+                // Votre code existant pour charger les modèles
                 const brandId = this.value;
 
                 // Reset model select
@@ -338,6 +347,179 @@
                     modelSelect.innerHTML = '<option value="">Select a brand first</option>';
                 }
             });
+
+            // Nouveau code pour la gestion des images
+            const fileInput = document.getElementById('file-upload');
+            const previewContainer = document.getElementById('preview-container');
+            const dropArea = document.getElementById('drop-area');
+            const errorContainer = document.getElementById('error-container');
+            const imageCountDisplay = document.getElementById('image-count');
+            const imagesContainer = document.getElementById('images-container');
+            const form = document.querySelector('form');
+
+            // Tableau pour stocker les fichiers sélectionnés
+            let selectedFiles = [];
+
+            const maxFiles = 10;
+            const maxFileSize = 5 * 1024 * 1024; // 5MB
+            const allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
+
+            // Fonction pour afficher les erreurs
+            function showError(message) {
+                errorContainer.textContent = message;
+                errorContainer.classList.remove('hidden');
+                setTimeout(() => {
+                    errorContainer.classList.add('hidden');
+                }, 5000);
+            }
+
+            // Fonction pour mettre à jour le compteur d'images
+            function updateImageCount() {
+                imageCountDisplay.textContent = `${selectedFiles.length} image(s) sélectionnée(s)`;
+            }
+
+            // Fonction pour prévisualiser les images
+            function updatePreview() {
+                // Vider le conteneur de prévisualisation
+                previewContainer.innerHTML = '';
+                imagesContainer.innerHTML = '';
+
+                // Traiter chaque fichier
+                selectedFiles.forEach((file, index) => {
+                    // Créer un élément de prévisualisation
+                    const previewItem = document.createElement('div');
+                    previewItem.className = 'relative group';
+
+                    // Créer l'image de prévisualisation
+                    const img = document.createElement('img');
+                    img.className = 'h-32 w-full object-cover rounded-lg';
+
+                    // Lire le fichier et afficher l'aperçu
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        img.src = e.target.result;
+                    };
+                    reader.readAsDataURL(file);
+
+                    previewItem.appendChild(img);
+
+                    // Créer le bouton de suppression
+                    const removeButton = document.createElement('button');
+                    removeButton.className =
+                        'absolute top-1 right-1 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity';
+                    removeButton.innerHTML = `
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                `;
+                    removeButton.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        // Supprimer le fichier du tableau
+                        selectedFiles.splice(index, 1);
+                        // Mettre à jour l'aperçu
+                        updatePreview();
+                        updateImageCount();
+                    });
+                    previewItem.appendChild(removeButton);
+
+                    // Ajouter au conteneur d'aperçu
+                    previewContainer.appendChild(previewItem);
+
+                    // Créer un input file caché pour ce fichier
+                    const hiddenInput = document.createElement('input');
+                    hiddenInput.type = 'file';
+                    hiddenInput.name = `images[]`;
+                    hiddenInput.classList.add('hidden');
+                    hiddenInput.dataset.index = index;
+
+                    // Créer un objet DataTransfer pour pouvoir assigner le fichier à l'input
+                    const dataTransfer = new DataTransfer();
+                    dataTransfer.items.add(file);
+                    hiddenInput.files = dataTransfer.files;
+
+                    // Ajouter l'input au formulaire
+                    imagesContainer.appendChild(hiddenInput);
+                });
+            }
+
+            // Fonction pour ajouter des fichiers à la sélection
+            function addFiles(files) {
+                // Vérifier le nombre total de fichiers
+                if (selectedFiles.length + files.length > maxFiles) {
+                    showError(`Vous ne pouvez pas télécharger plus de ${maxFiles} images au total.`);
+                    return;
+                }
+
+                // Filtrer et ajouter les nouveaux fichiers
+                Array.from(files).forEach(file => {
+                    // Vérifier le type de fichier
+                    if (!allowedTypes.includes(file.type)) {
+                        showError(`Le fichier "${file.name}" n'est pas un type d'image valide.`);
+                        return;
+                    }
+
+                    // Vérifier la taille du fichier
+                    if (file.size > maxFileSize) {
+                        showError(`Le fichier "${file.name}" dépasse la taille maximale de 5MB.`);
+                        return;
+                    }
+
+                    // Ajouter le fichier au tableau
+                    selectedFiles.push(file);
+                });
+
+                // Mettre à jour l'aperçu et le compteur
+                updatePreview();
+                updateImageCount();
+            }
+
+            // Écouter le changement de l'input file
+            fileInput.addEventListener('change', function() {
+                if (this.files.length > 0) {
+                    addFiles(this.files);
+                    // Réinitialiser l'input pour permettre la sélection du même fichier
+                    this.value = '';
+                }
+            });
+
+            // Gérer le glisser-déposer
+            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                dropArea.addEventListener(eventName, (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                }, false);
+            });
+
+            ['dragenter', 'dragover'].forEach(eventName => {
+                dropArea.addEventListener(eventName, () => {
+                    dropArea.classList.add('border-blue-500', 'bg-blue-50', 'dark:bg-blue-900/20');
+                }, false);
+            });
+
+            ['dragleave', 'drop'].forEach(eventName => {
+                dropArea.addEventListener(eventName, () => {
+                    dropArea.classList.remove('border-blue-500', 'bg-blue-50',
+                        'dark:bg-blue-900/20');
+                }, false);
+            });
+
+            dropArea.addEventListener('drop', (e) => {
+                const dt = e.dataTransfer;
+                const files = dt.files;
+
+                if (files.length > 0) {
+                    addFiles(files);
+                }
+            }, false);
+
+            // S'assurer que le formulaire est correctement soumis avec les images
+            form.addEventListener('submit', function(e) {
+                if (selectedFiles.length === 0) {
+                    e.preventDefault();
+                    showError('Veuillez ajouter au moins une image de votre véhicule.');
+                }
+            });
         });
     </script>
+
 </x-app-layout>

@@ -17,7 +17,7 @@ return new class extends Migration
             $table->unsignedInteger('year');
             $table->unsignedInteger('mileage'); // kilométrage
             $table->enum('fuel_type', ['diesel', 'essence', 'électrique', 'hybride', 'gpl']);
-            $table->enum('transmission', ['manuelle', 'automatique', 'semi-automatique']);
+            $table->enum('transmission', ['Manual', 'Automatic', 'Semi-automatic']);
             $table->foreignId('brand_id')->constrained();
             $table->foreignId('model_id')->constrained('car_models');
             $table->foreignId('category_id')->constrained();
