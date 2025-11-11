@@ -332,7 +332,7 @@ class CarController extends Controller
             $this->uploadCarImages($car, $request->file('images'));
         }
         
-        return redirect()->route('cars.show', $car)
+        return redirect()->route('cars.index')
             ->with('success', 'Votre annonce a été publiée avec succès!');
     }
 
@@ -439,7 +439,7 @@ class CarController extends Controller
             }
         }
         
-        return redirect()->route('cars.show', $car)
+        return redirect()->route('cars.index')
             ->with('success', 'Votre annonce a été mise à jour avec succès!');
     }
 

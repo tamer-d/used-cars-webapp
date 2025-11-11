@@ -1,6 +1,6 @@
 <x-app-layout>
     <div class="py-6">
-        <div class="max-w-7xl mx-auto sm:px-4 lg:px-6">
+        <div class="max-w-5xl mx-auto sm:px-4 lg:px-6">
             <div class="mb-4">
                 <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Post a Listing</h1>
                 <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
@@ -70,14 +70,116 @@
                             @enderror
                         </div>
 
-                        <!-- Location -->
+                        <!-- Location (Wilayas d'Algérie) -->
                         <div>
                             <label for="location" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                                Location *
+                                Location (Wilaya) *
                             </label>
-                            <input type="text" name="location" id="location" value="{{ old('location') }}"
+                            <select name="location" id="location"
                                 class="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-white shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                                placeholder="City or region" required>
+                                required>
+                                <option value="">Select a wilaya</option>
+                                <option value="Adrar" {{ old('location') == 'Adrar' ? 'selected' : '' }}>01 - Adrar
+                                </option>
+                                <option value="Chlef" {{ old('location') == 'Chlef' ? 'selected' : '' }}>02 - Chlef
+                                </option>
+                                <option value="Laghouat" {{ old('location') == 'Laghouat' ? 'selected' : '' }}>03 -
+                                    Laghouat</option>
+                                <option value="Oum El Bouaghi"
+                                    {{ old('location') == 'Oum El Bouaghi' ? 'selected' : '' }}>04 - Oum El Bouaghi
+                                </option>
+                                <option value="Batna" {{ old('location') == 'Batna' ? 'selected' : '' }}>05 - Batna
+                                </option>
+                                <option value="Béjaïa" {{ old('location') == 'Béjaïa' ? 'selected' : '' }}>06 - Béjaïa
+                                </option>
+                                <option value="Biskra" {{ old('location') == 'Biskra' ? 'selected' : '' }}>07 - Biskra
+                                </option>
+                                <option value="Béchar" {{ old('location') == 'Béchar' ? 'selected' : '' }}>08 - Béchar
+                                </option>
+                                <option value="Blida" {{ old('location') == 'Blida' ? 'selected' : '' }}>09 - Blida
+                                </option>
+                                <option value="Bouira" {{ old('location') == 'Bouira' ? 'selected' : '' }}>10 - Bouira
+                                </option>
+                                <option value="Tamanrasset" {{ old('location') == 'Tamanrasset' ? 'selected' : '' }}>11
+                                    - Tamanrasset</option>
+                                <option value="Tébessa" {{ old('location') == 'Tébessa' ? 'selected' : '' }}>12 -
+                                    Tébessa</option>
+                                <option value="Tlemcen" {{ old('location') == 'Tlemcen' ? 'selected' : '' }}>13 -
+                                    Tlemcen</option>
+                                <option value="Tiaret" {{ old('location') == 'Tiaret' ? 'selected' : '' }}>14 - Tiaret
+                                </option>
+                                <option value="Tizi Ouzou" {{ old('location') == 'Tizi Ouzou' ? 'selected' : '' }}>15 -
+                                    Tizi Ouzou</option>
+                                <option value="Alger" {{ old('location') == 'Alger' ? 'selected' : '' }}>16 - Alger
+                                </option>
+                                <option value="Djelfa" {{ old('location') == 'Djelfa' ? 'selected' : '' }}>17 - Djelfa
+                                </option>
+                                <option value="Jijel" {{ old('location') == 'Jijel' ? 'selected' : '' }}>18 - Jijel
+                                </option>
+                                <option value="Sétif" {{ old('location') == 'Sétif' ? 'selected' : '' }}>19 - Sétif
+                                </option>
+                                <option value="Saïda" {{ old('location') == 'Saïda' ? 'selected' : '' }}>20 - Saïda
+                                </option>
+                                <option value="Skikda" {{ old('location') == 'Skikda' ? 'selected' : '' }}>21 - Skikda
+                                </option>
+                                <option value="Sidi Bel Abbès"
+                                    {{ old('location') == 'Sidi Bel Abbès' ? 'selected' : '' }}>22 - Sidi Bel Abbès
+                                </option>
+                                <option value="Annaba" {{ old('location') == 'Annaba' ? 'selected' : '' }}>23 - Annaba
+                                </option>
+                                <option value="Guelma" {{ old('location') == 'Guelma' ? 'selected' : '' }}>24 - Guelma
+                                </option>
+                                <option value="Constantine" {{ old('location') == 'Constantine' ? 'selected' : '' }}>25
+                                    - Constantine</option>
+                                <option value="Médéa" {{ old('location') == 'Médéa' ? 'selected' : '' }}>26 - Médéa
+                                </option>
+                                <option value="Mostaganem" {{ old('location') == 'Mostaganem' ? 'selected' : '' }}>27 -
+                                    Mostaganem</option>
+                                <option value="M'Sila" {{ old('location') == 'M\'Sila' ? 'selected' : '' }}>28 - M'Sila
+                                </option>
+                                <option value="Mascara" {{ old('location') == 'Mascara' ? 'selected' : '' }}>29 -
+                                    Mascara</option>
+                                <option value="Ouargla" {{ old('location') == 'Ouargla' ? 'selected' : '' }}>30 -
+                                    Ouargla</option>
+                                <option value="Oran" {{ old('location') == 'Oran' ? 'selected' : '' }}>31 - Oran
+                                </option>
+                                <option value="El Bayadh" {{ old('location') == 'El Bayadh' ? 'selected' : '' }}>32 -
+                                    El Bayadh</option>
+                                <option value="Illizi" {{ old('location') == 'Illizi' ? 'selected' : '' }}>33 - Illizi
+                                </option>
+                                <option value="Bordj Bou Arreridj"
+                                    {{ old('location') == 'Bordj Bou Arreridj' ? 'selected' : '' }}>34 - Bordj Bou
+                                    Arreridj</option>
+                                <option value="Boumerdès" {{ old('location') == 'Boumerdès' ? 'selected' : '' }}>35 -
+                                    Boumerdès</option>
+                                <option value="El Tarf" {{ old('location') == 'El Tarf' ? 'selected' : '' }}>36 - El
+                                    Tarf</option>
+                                <option value="Tindouf" {{ old('location') == 'Tindouf' ? 'selected' : '' }}>37 -
+                                    Tindouf</option>
+                                <option value="Tissemsilt" {{ old('location') == 'Tissemsilt' ? 'selected' : '' }}>38 -
+                                    Tissemsilt</option>
+                                <option value="El Oued" {{ old('location') == 'El Oued' ? 'selected' : '' }}>39 - El
+                                    Oued</option>
+                                <option value="Khenchela" {{ old('location') == 'Khenchela' ? 'selected' : '' }}>40 -
+                                    Khenchela</option>
+                                <option value="Souk Ahras" {{ old('location') == 'Souk Ahras' ? 'selected' : '' }}>41 -
+                                    Souk Ahras</option>
+                                <option value="Tipaza" {{ old('location') == 'Tipaza' ? 'selected' : '' }}>42 - Tipaza
+                                </option>
+                                <option value="Mila" {{ old('location') == 'Mila' ? 'selected' : '' }}>43 - Mila
+                                </option>
+                                <option value="Aïn Defla" {{ old('location') == 'Aïn Defla' ? 'selected' : '' }}>44 -
+                                    Aïn Defla</option>
+                                <option value="Naâma" {{ old('location') == 'Naâma' ? 'selected' : '' }}>45 - Naâma
+                                </option>
+                                <option value="Aïn Témouchent"
+                                    {{ old('location') == 'Aïn Témouchent' ? 'selected' : '' }}>46 - Aïn Témouchent
+                                </option>
+                                <option value="Ghardaïa" {{ old('location') == 'Ghardaïa' ? 'selected' : '' }}>47 -
+                                    Ghardaïa</option>
+                                <option value="Relizane" {{ old('location') == 'Relizane' ? 'selected' : '' }}>48 -
+                                    Relizane</option>
+                            </select>
                             @error('location')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                             @enderror
@@ -90,8 +192,8 @@
                     class="bg-white dark:bg-gray-800 shadow-lg rounded-lg p-4 mb-4 transition-transform transform hover:scale-105">
                     <div class="flex items-center mb-3">
                         <div class="bg-green-100 dark:bg-green-900 p-2 rounded-full mr-2">
-                            <svg class="w-5 h-5 text-green-600 dark:text-green-300" fill="none" stroke="currentColor"
-                                viewBox="0 0 24 24">
+                            <svg class="w-5 h-5 text-green-600 dark:text-green-300" fill="none"
+                                stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01">
                                 </path>
@@ -100,7 +202,7 @@
                         <h2 class="text-lg font-semibold text-gray-900 dark:text-white">Vehicle Features</h2>
                     </div>
 
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                         <!-- Brand -->
                         <div>
                             <label for="brand_id" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
@@ -139,7 +241,8 @@
 
                         <!-- Category -->
                         <div>
-                            <label for="category_id" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                            <label for="category_id"
+                                class="block text-sm font-medium text-gray-700 dark:text-gray-300">
                                 Category *
                             </label>
                             <select name="category_id" id="category_id"
@@ -243,14 +346,19 @@
                             @enderror
                         </div>
 
-                        <!-- Color -->
+                        <!-- Color with color picker -->
                         <div>
                             <label for="color" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
                                 Color *
                             </label>
-                            <input type="text" name="color" id="color" value="{{ old('color') }}"
-                                class="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-white shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                                required>
+                            <div class="flex space-x-2 mt-1">
+                                <input type="color" id="color-picker"
+                                    class="h-10 w-10 border-gray-300 dark:border-gray-700 rounded cursor-pointer"
+                                    value="{{ old('color-hex', '#ffffff') }}">
+                                <input type="text" name="color" id="color" value="{{ old('color') }}"
+                                    class="block w-full rounded-md border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-white shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                                    required>
+                            </div>
                             @error('color')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                             @enderror
@@ -312,7 +420,7 @@
                         <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                             Equipment and Options
                         </label>
-                        <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
                             @foreach ($features as $feature)
                                 <div class="flex items-center">
                                     <input type="checkbox" name="features[]" id="feature-{{ $feature->id }}"
@@ -446,6 +554,112 @@
                     modelSelect.innerHTML = '<option value="">Select a brand first</option>';
                 }
             });
+
+            // Color picker functionality
+            const colorPicker = document.getElementById('color-picker');
+            const colorInput = document.getElementById('color');
+
+            // Set initial color if there's a value
+            if (colorInput.value) {
+                try {
+                    // Try to convert the color name to hex
+                    const tempElement = document.createElement('div');
+                    tempElement.style.color = colorInput.value;
+                    document.body.appendChild(tempElement);
+                    const computedColor = window.getComputedStyle(tempElement).color;
+                    document.body.removeChild(tempElement);
+
+                    // Convert rgb to hex
+                    if (computedColor.startsWith('rgb')) {
+                        const rgb = computedColor.match(/\d+/g);
+                        if (rgb && rgb.length === 3) {
+                            const hex = '#' + rgb.map(x => {
+                                const hex = parseInt(x).toString(16);
+                                return hex.length === 1 ? '0' + hex : hex;
+                            }).join('');
+                            colorPicker.value = hex;
+                        }
+                    }
+                } catch (e) {
+                    console.error('Error setting initial color:', e);
+                }
+            }
+
+            // Update text input when color picker changes
+            colorPicker.addEventListener('input', function() {
+                // Convert hex to color name or keep hex if no name exists
+                const hexColor = this.value;
+
+                // Get the closest color name
+                const colorName = getColorNameFromHex(hexColor);
+                colorInput.value = colorName || hexColor;
+            });
+
+            // Update color picker when text input changes
+            colorInput.addEventListener('input', function() {
+                try {
+                    const tempElement = document.createElement('div');
+                    tempElement.style.color = this.value;
+                    document.body.appendChild(tempElement);
+                    const computedColor = window.getComputedStyle(tempElement).color;
+                    document.body.removeChild(tempElement);
+
+                    // Convert rgb to hex
+                    if (computedColor.startsWith('rgb')) {
+                        const rgb = computedColor.match(/\d+/g);
+                        if (rgb && rgb.length === 3) {
+                            const hex = '#' + rgb.map(x => {
+                                const hex = parseInt(x).toString(16);
+                                return hex.length === 1 ? '0' + hex : hex;
+                            }).join('');
+                            colorPicker.value = hex;
+                        }
+                    }
+                } catch (e) {
+                    // If error, don't update the color picker
+                }
+            });
+
+            // Function to get color name from hex
+            function getColorNameFromHex(hex) {
+                // Basic color mapping
+                const colorMap = {
+                    '#000000': 'Black',
+                    '#FFFFFF': 'White',
+                    '#FF0000': 'Red',
+                    '#00FF00': 'Green',
+                    '#0000FF': 'Blue',
+                    '#FFFF00': 'Yellow',
+                    '#00FFFF': 'Cyan',
+                    '#FF00FF': 'Magenta',
+                    '#C0C0C0': 'Silver',
+                    '#808080': 'Gray',
+                    '#800000': 'Maroon',
+                    '#808000': 'Olive',
+                    '#008000': 'Green',
+                    '#800080': 'Purple',
+                    '#008080': 'Teal',
+                    '#000080': 'Navy',
+                    '#FFA500': 'Orange',
+                    '#A52A2A': 'Brown',
+                    '#FFC0CB': 'Pink',
+                    '#FFD700': 'Gold',
+                    '#ADFF2F': 'GreenYellow',
+                    '#B8860B': 'DarkGoldenrod',
+                    '#D2691E': 'Chocolate',
+                    '#DC143C': 'Crimson',
+                    '#4682B4': 'SteelBlue',
+                    '#2E8B57': 'SeaGreen',
+                    '#9370DB': 'MediumPurple',
+                    '#F5F5DC': 'Beige',
+                };
+
+                // Normalize hex to uppercase
+                const normalizedHex = hex.toUpperCase();
+
+                // Return the color name or null if not found
+                return colorMap[normalizedHex] || null;
+            }
 
             // New code for image management
             const fileInput = document.getElementById('file-upload');
